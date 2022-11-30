@@ -61,4 +61,6 @@ dgcnn_group.py
 
 # 实验：
 - 找替换DGCNN的方法。
-- PCN
+- 用PCN model处理Transformer输出的粗点云
+- PoinTr https://drive.google.com/file/d/1sDlMx5b47X9yHNxdE9mge022Vi5I8CN6/view?usp=share_link
+- PCN https://drive.google.com/file/d/1QNeZ7yMbnq1zINLztZ2qmFfdtAFw-5iU/view?usp=share_link
