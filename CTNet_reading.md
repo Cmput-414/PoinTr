@@ -33,7 +33,9 @@
     --- 
     - Intermediate features
     - Category features    
-   - Feature:
+    
+  - Feature:
+    ---
      - Self-attentive model: Models the spatial relationship between pixels and categories, and then aggregates them by using category features to obtain a feature representation of long-range dependencies.
      - Further reduction of computational cost by using convolutional layers
      - is fed to a new convolutional layer to generate a new class feature map
