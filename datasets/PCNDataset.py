@@ -130,7 +130,7 @@ class PCN(data.Dataset):
 
         if self.transforms is not None:
             data = self.transforms(data)
-        classV = self.cls_identify(sample)
+        
         return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], sample['one_hot_vector'],sample['taxonomy_name'])
 
     def __len__(self):
