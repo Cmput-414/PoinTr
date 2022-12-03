@@ -32,8 +32,6 @@ class PCN(data.Dataset):
             self.dataset_categories = json.loads(f.read())
             self.clst = len(self.dataset_categories)
             if config.CARS:
-                #print("\nself:")
-                #print(self.dataset_categories[1])
                 self.dataset_categories = [dc for dc in self.dataset_categories if dc['taxonomy_id'] == '02958343']
         self.cls = np.zeros(self.clst)
         
