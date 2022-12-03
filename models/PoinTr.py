@@ -50,10 +50,10 @@ class Fold(nn.Module):
         #     nn.Conv1d(512,self.encoder_channel,1)
         # )
         self.folding3 = nn.Sequential(
-            nn.Conv1d(in_channel + 3, 768, 1),
-            nn.BatchNorm1d(768),
+            nn.Conv1d(2, 3584, 1),
+            nn.BatchNorm1d(3584),
             nn.ReLU(inplace=True),
-            nn.Conv1d(768, 384, 1),
+            nn.Conv1d(3584, 384, 1),
             nn.BatchNorm1d(284),
             nn.ReLU(inplace=True),
             nn.Conv1d(384, 3, 1),
@@ -61,6 +61,9 @@ class Fold(nn.Module):
 
     def forward(self, x):
         # x-----> torch.Size([3584, 384])
+        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 768 387 1, 
+        # but got 2-dimensional input of size [3584, 384] instead
+
         print("-"*20, x.size())
         fd0=self.folding3(x)
         print("+"*20, fd0.sixe())
