@@ -81,6 +81,10 @@ def run_net(args, config, train_writer=None, val_writer=None):
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
+                print(cls)
+                print(name)
                 if config.dataset.train._base_.CARS:
                     if idx == 0:
                         print_log('padding while KITTI training', logger=logger)
