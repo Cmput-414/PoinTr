@@ -69,6 +69,9 @@ class Fold(nn.Module):
 
         # TypeError: __init__() missing 1 required positional argument: 'kernel_size'
 
+        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
+        # but got 2-dimensional input of size [3584, 384] instead
+
         print("-"*20, x.size())
         fd0=self.folding3(x)
         print("+"*20, fd0.sixe())
@@ -137,6 +140,7 @@ class PoinTr(nn.Module):
         # coarse_point_cloud = self.refine_coarse(rebuild_feature).reshape(B, M, 3)
 
         # NOTE: foldingNet
+        print("#"*20, rebuild_feature.size())
         relative_xyz = self.foldingnet(rebuild_feature).reshape(B, M, 3, -1)    # B M 3 S
         rebuild_points = (relative_xyz + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)  # B N 3
 
