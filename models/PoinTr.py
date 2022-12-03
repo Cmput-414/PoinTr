@@ -71,6 +71,12 @@ class Fold(nn.Module):
 
         # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
         # but got 2-dimensional input of size [3584, 384] instead
+        #################### torch.Size([3584, 384])
+        # -1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1 torch.Size([3584, 384])
+        # -2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2 torch.Size([3584, 386, 64])
+        # ---fd1---fd1---fd1---fd1---fd1---fd1---fd1---fd1 torch.Size([3584, 3, 64])
+        # -3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3 torch.Size([3584, 387, 64])
+        # ---fd2---fd2---fd2---fd2---fd2---fd2---fd2-----fd2 torch.Size([3584, 3, 64])
 
         print("-1"*20, x.size())
         #fd0=self.folding1(x)
