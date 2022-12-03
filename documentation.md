@@ -111,3 +111,15 @@ dgcnn_group.py
 - 用PCN model处理Transformer输出的粗点云
 - PoinTr https://drive.google.com/file/d/1sDlMx5b47X9yHNxdE9mge022Vi5I8CN6/view?usp=share_link
 - PCN https://drive.google.com/file/d/1QNeZ7yMbnq1zINLztZ2qmFfdtAFw-5iU/view?usp=share_link
+
+# 实验2:
+- 在FoldingNet的基础上加上一个Classification Network
+- 1，dataloader 除了particle 和 complete（gt） 之外需要一个 classification（one hot vector）
+- 2，foldingNet 自己搭建一个 CNN （Con1D - BN - Relu）x n +（fc - softmax），return fd2 label1（BxM）
+- 3，runne.py 除了 spaser Denser loss 之外添加新的 classification loss
+- 4，builder.py classfication loss
+
+
+
+
+
