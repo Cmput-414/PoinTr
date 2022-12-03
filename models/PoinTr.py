@@ -73,8 +73,8 @@ class Fold(nn.Module):
         # but got 2-dimensional input of size [3584, 384] instead
 
         print("-1"*20, x.size())
-        fd0=self.folding1(x)
-        print("+"*20, fd0.sixe())
+        #fd0=self.folding1(x)
+        #print("+"*20, fd0.sixe())
 
 
 
@@ -87,8 +87,11 @@ class Fold(nn.Module):
         x = torch.cat([seed, features], dim=1)
         print("-2"*20, x.size())
         fd1 = self.folding1(x)
+        print("---fd1"*20, fd1.size())
         x = torch.cat([fd1, features], dim=1)
+        print("-3"*20, x.size())
         fd2 = self.folding2(x)
+        print("---fd2"*20, fd2.size())
 
         return fd2
 class Cls(nn.Module):
