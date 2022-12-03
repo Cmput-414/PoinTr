@@ -8,6 +8,7 @@ from utils.logger import *
 import numpy as np
 # from knn_cuda import KNN
 # knn = KNN(k=8, transpose_mode=False)
+# test
 
 def knn_point(nsample, xyz, new_xyz):
     """
