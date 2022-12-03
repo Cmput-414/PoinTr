@@ -137,8 +137,8 @@ class Cls(nn.Module):
         # but got 2-dimensional input of size [3584, 384] instead
 
         print("-1"*20, x.size())
-        fd0=self.folding1(x)
-        print("+"*20, fd0.sixe())
+        #fd0=self.folding1(x)
+        #print("+"*20, fd0.sixe())
 
 
 
