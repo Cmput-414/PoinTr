@@ -50,11 +50,11 @@ class Fold(nn.Module):
         #     nn.Conv1d(512,self.encoder_channel,1)
         # )
         self.folding3 = nn.Sequential(
-            nn.Conv1d(2, 3584),
-            nn.BatchNorm1d(3584),
+            nn.Conv1d(3584, 1792, 1),
+            nn.BatchNorm1d(1972),
             nn.ReLU(inplace=True),
-            nn.Conv1d(3584, 384, 1),
-            nn.BatchNorm1d(284),
+            nn.Conv1d(1972, 384, 1),
+            nn.BatchNorm1d(384),
             nn.ReLU(inplace=True),
             nn.Conv1d(384, 3, 1),
         )
@@ -66,6 +66,8 @@ class Fold(nn.Module):
 
         # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 3584 2 1, 
         # but got 2-dimensional input of size [3584, 384] instead
+
+        # TypeError: __init__() missing 1 required positional argument: 'kernel_size'
 
         print("-"*20, x.size())
         fd0=self.folding3(x)
