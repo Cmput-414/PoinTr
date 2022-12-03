@@ -72,8 +72,8 @@ class Fold(nn.Module):
         # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
         # but got 2-dimensional input of size [3584, 384] instead
 
-        print("-"*20, x.size())
-        fd0=self.folding3(x)
+        print("-1"*20, x.size())
+        fd0=self.folding1(x)
         print("+"*20, fd0.sixe())
 
 
@@ -85,12 +85,79 @@ class Fold(nn.Module):
         seed = self.folding_seed.view(1, 2, num_sample).expand(bs, 2, num_sample).to(x.device)
 
         x = torch.cat([seed, features], dim=1)
+        print("-2"*20, x.size())
         fd1 = self.folding1(x)
         x = torch.cat([fd1, features], dim=1)
         fd2 = self.folding2(x)
 
         return fd2
+class Cls(nn.Module):
+    def __init__(self, in_channel , step , hidden_dim = 512):
+        super().__init__()
 
+        self.in_channel = in_channel
+        self.step = step
+
+        a = torch.linspace(-1., 1., steps=step, dtype=torch.float).view(1, step).expand(step, step).reshape(1, -1)
+        b = torch.linspace(-1., 1., steps=step, dtype=torch.float).view(step, 1).expand(step, step).reshape(1, -1)
+        self.folding_seed = torch.cat([a, b], dim=0).cuda()
+
+        self.folding1 = nn.Sequential(
+            nn.Conv1d(in_channel + 2, hidden_dim, 1),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim, hidden_dim//2, 1),
+            nn.BatchNorm1d(hidden_dim//2),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim//2, 3, 1),
+        )
+
+        self.folding2 = nn.Sequential(
+            nn.Conv1d(in_channel + 3, hidden_dim, 1),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim, hidden_dim//2, 1),
+            nn.BatchNorm1d(hidden_dim//2),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim//2, 3, 1),
+        )
+        
+
+    def forward(self, x):
+        # x-----> torch.Size([3584, 384])
+        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 768 387 1, 
+        # but got 2-dimensional input of size [3584, 384] instead
+
+        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 3584 2 1, 
+        # but got 2-dimensional input of size [3584, 384] instead
+
+        # TypeError: __init__() missing 1 required positional argument: 'kernel_size'
+
+        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
+        # but got 2-dimensional input of size [3584, 384] instead
+
+        print("-1"*20, x.size())
+        fd0=self.folding1(x)
+        print("+"*20, fd0.sixe())
+
+
+
+
+        num_sample = self.step * self.step
+        bs = x.size(0)
+        features = x.view(bs, self.in_channel, 1).expand(bs, self.in_channel, num_sample)
+        seed = self.folding_seed.view(1, 2, num_sample).expand(bs, 2, num_sample).to(x.device)
+
+        x = torch.cat([seed, features], dim=1)
+        print("-2"*20, x.size())
+        fd1 = self.folding1(x)
+        print("---fd1"*20, fd1.size())
+        x = torch.cat([fd1, features], dim=1)
+        print("-3"*20, x.size())
+        fd2 = self.folding2(x)
+        print("---fd2"*20, fd2.size())
+
+        return fd2
 @MODELS.register_module()
 class PoinTr(nn.Module):
     def __init__(self, config, **kwargs):
