@@ -43,12 +43,12 @@ class Fold(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv1d(hidden_dim//2, 3, 1),
         )
-        self.second_conv = nn.Sequential(
-            nn.Conv1d(512,512,1),
-            nn.BatchNorm1d(512),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(512,self.encoder_channel,1)
-        )
+        # self.second_conv = nn.Sequential(
+        #     nn.Conv1d(512,512,1),
+        #     nn.BatchNorm1d(512),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv1d(512,self.encoder_channel,1)
+        # )
 
     def forward(self, x):
         print("-"*20, x.size())
