@@ -49,9 +49,21 @@ class Fold(nn.Module):
         #     nn.ReLU(inplace=True),
         #     nn.Conv1d(512,self.encoder_channel,1)
         # )
+        self.folding3 = nn.Sequential(
+            nn.Conv1d(in_channel + 3, 768, 1),
+            nn.BatchNorm1d(768),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(768, 384, 1),
+            nn.BatchNorm1d(284),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(384, 3, 1),
+        )
 
     def forward(self, x):
+        # x-----> torch.Size([3584, 384])
         print("-"*20, x.size())
+        fd0=self.folding3(x)
+        print("+"*20, fd0.sixe())
 
 
 
