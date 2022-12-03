@@ -112,19 +112,7 @@ class PCN(data.Dataset):
         print_log('Complete collecting files of the dataset. Total files: %d' % len(file_list), logger='PCNDATASET')
         return file_list
 
-    def cls_identify(self, f_list):
-      for dc in self.dataset_categories:
-        classV1 = np.zeros(self.clst)
-        i = 0
-        find = False
-        while find == False:
-          if dc == self.dataset_categories[i]:
-            classV = classV1
-            classV[i] = 1
-            find = True
-          else:
-            i = i+1
-      return classV
+
 
 
     def __getitem__(self, idx):
