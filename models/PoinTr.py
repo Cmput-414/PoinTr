@@ -43,130 +43,57 @@ class Fold(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv1d(hidden_dim//2, 3, 1),
         )
-        # self.second_conv = nn.Sequential(
-        #     nn.Conv1d(512,512,1),
-        #     nn.BatchNorm1d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv1d(512,self.encoder_channel,1)
-        # )
-        self.folding3 = nn.Sequential(
-            nn.Conv1d(3584, 1792, 1),
-            nn.BatchNorm1d(1972),
+        self.Cls1 = nn.Sequential(
+            nn.Conv1d(3, hidden_dim//8, 1),
+            nn.BatchNorm1d(hidden_dim//8),
             nn.ReLU(inplace=True),
-            nn.Conv1d(1972, 384, 1),
-            nn.BatchNorm1d(384),
+            nn.Conv1d(hidden_dim//8,hidden_dim//4,1),
+            nn.BatchNorm1d(hidden_dim//4),
             nn.ReLU(inplace=True),
-            nn.Conv1d(384, 3, 1),
+            nn.Conv1d(hidden_dim//4,hidden_dim//2,1),
+            nn.BatchNorm1d(hidden_dim//2),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim//2,hidden_dim,1),
+            nn.Flatten(),
         )
+        self.cf1 = nn.Linear(16384, 64)
+        self.cf2 = nn.Linear(64 , 8)
+        self.Cls2 = nn.Sequential(
+            nn.Conv1d(224, hidden_dim//2,1),
+            nn.BatchNorm1d(hidden_dim//2),
+            nn.ReLU(inplace=True),
+            nn.Conv1d(hidden_dim//2, hidden_dim,1),
+            nn.Flatten(),
+        )
+        self.cf3 = nn.Linear(2048,32)
+        self.cf4 = nn.Linear(32,8)
+        self.sf = nn.Softmax()
 
     def forward(self, x):
-        # x-----> torch.Size([3584, 384])
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 768 387 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 3584 2 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-
-        # TypeError: __init__() missing 1 required positional argument: 'kernel_size'
-
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-        #################### torch.Size([3584, 384])
-        # -1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1 torch.Size([3584, 384])
-        # -2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2 torch.Size([3584, 386, 64])
-        # ---fd1---fd1---fd1---fd1---fd1---fd1---fd1---fd1 torch.Size([3584, 3, 64])
-        # -3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3 torch.Size([3584, 387, 64])
-        # ---fd2---fd2---fd2---fd2---fd2---fd2---fd2-----fd2 torch.Size([3584, 3, 64])
-
-        print("-1"*20, x.size())
-        #fd0=self.folding1(x)
-        #print("+"*20, fd0.sixe())
-
-
-
-
+        #print(x.size()) #BM S.  Total_bs * num_Query, Token
         num_sample = self.step * self.step
         bs = x.size(0)
         features = x.view(bs, self.in_channel, 1).expand(bs, self.in_channel, num_sample)
         seed = self.folding_seed.view(1, 2, num_sample).expand(bs, 2, num_sample).to(x.device)
 
         x = torch.cat([seed, features], dim=1)
-        print("-2"*20, x.size())
         fd1 = self.folding1(x)
-        print("---fd1"*20, fd1.size())
         x = torch.cat([fd1, features], dim=1)
-        print("-3"*20, x.size())
-        fd2 = self.folding2(x)
-        print("---fd2"*20, fd2.size())
-
-        return fd2
-class Cls(nn.Module):
-    def __init__(self, in_channel , step , hidden_dim = 512):
-        super().__init__()
-
-        self.in_channel = in_channel
-        self.step = step
-
-        a = torch.linspace(-1., 1., steps=step, dtype=torch.float).view(1, step).expand(step, step).reshape(1, -1)
-        b = torch.linspace(-1., 1., steps=step, dtype=torch.float).view(step, 1).expand(step, step).reshape(1, -1)
-        self.folding_seed = torch.cat([a, b], dim=0).cuda()
-
-        self.folding1 = nn.Sequential(
-            nn.Conv1d(in_channel + 2, hidden_dim, 1),
-            nn.BatchNorm1d(hidden_dim),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim, hidden_dim//2, 1),
-            nn.BatchNorm1d(hidden_dim//2),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//2, 3, 1),
-        )
-
-        self.folding2 = nn.Sequential(
-            nn.Conv1d(in_channel + 3, hidden_dim, 1),
-            nn.BatchNorm1d(hidden_dim),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim, hidden_dim//2, 1),
-            nn.BatchNorm1d(hidden_dim//2),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//2, 3, 1),
-        )
+        fd2 = self.folding2(x) #3584, 3, 64
+        label1 = self.Cls1(fd2) #3584, 16384
+        label1 = self.cf1(label1) #3584, 64
+        label1 = self.cf2(label1) #3584, 8
+        label2 = label1.reshape(16,224,8) # 16 224 8
+        label2 = self.Cls2(label2) # 16, 2048
+        label2 = self.cf3(label2) # 16, 32
+        label2 = self.cf4(label2) # 16, 8
+        label2 = self.sf(label2) #softMax
         
+        print(label1.size())
+        print(fd2.size())
+        #print(fd2.size()) 
+        return fd2,label2
 
-    def forward(self, x):
-        # x-----> torch.Size([3584, 384])
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 768 387 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 3584 2 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-
-        # TypeError: __init__() missing 1 required positional argument: 'kernel_size'
-
-        # RuntimeError: Expected 3-dimensional input for 3-dimensional weight 1792 3584 1, 
-        # but got 2-dimensional input of size [3584, 384] instead
-
-        print("-1"*20, x.size())
-        #fd0=self.folding1(x)
-        #print("+"*20, fd0.sixe())
-
-
-
-
-        num_sample = self.step * self.step
-        bs = x.size(0)
-        features = x.view(bs, self.in_channel, 1).expand(bs, self.in_channel, num_sample)
-        seed = self.folding_seed.view(1, 2, num_sample).expand(bs, 2, num_sample).to(x.device)
-
-        x = torch.cat([seed, features], dim=1)
-        print("-2"*20, x.size())
-        fd1 = self.folding1(x)
-        print("---fd1"*20, fd1.size())
-        x = torch.cat([fd1, features], dim=1)
-        print("-3"*20, x.size())
-        fd2 = self.folding2(x)
-        print("---fd2"*20, fd2.size())
-
-        return fd2
 @MODELS.register_module()
 class PoinTr(nn.Module):
     def __init__(self, config, **kwargs):
@@ -192,11 +119,13 @@ class PoinTr(nn.Module):
 
     def build_loss_func(self):
         self.loss_func = ChamferDistanceL1()
+        self.C_E_loss_func = nn.CrossEntropyLoss()
 
-    def get_loss(self, ret, gt):
+    def get_loss(self, ret, gt, vector):
         loss_coarse = self.loss_func(ret[0], gt)
         loss_fine = self.loss_func(ret[1], gt)
-        return loss_coarse, loss_fine
+        loss_Cls = self.C_E_loss_func(ret[2], vector)
+        return loss_coarse, loss_fine, loss_Cls
 
     def forward(self, xyz):
         q, coarse_point_cloud = self.base_model(xyz) # B M C and B M 3
@@ -216,8 +145,10 @@ class PoinTr(nn.Module):
         # coarse_point_cloud = self.refine_coarse(rebuild_feature).reshape(B, M, 3)
 
         # NOTE: foldingNet
-        print("#"*20, rebuild_feature.size())
-        relative_xyz = self.foldingnet(rebuild_feature).reshape(B, M, 3, -1)    # B M 3 S
+        relative_xyz,label = self.foldingnet(rebuild_feature)
+        relative_xyz = relative_xyz.reshape(B, M, 3, -1)    # B M 3 S
+        print(">>>>>>>>")
+        print(label)
         rebuild_points = (relative_xyz + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)  # B N 3
 
         # NOTE: fc
@@ -228,7 +159,7 @@ class PoinTr(nn.Module):
         inp_sparse = fps(xyz, self.num_query)
         coarse_point_cloud = torch.cat([coarse_point_cloud, inp_sparse], dim=1).contiguous()
         rebuild_points = torch.cat([rebuild_points, xyz],dim=1).contiguous()
-
-        ret = (coarse_point_cloud, rebuild_points)
+        #print(coarse_point_cloud.size())
+        #print(rebuild_points.size())
+        ret = (coarse_point_cloud, rebuild_points,label)
         return ret
-
