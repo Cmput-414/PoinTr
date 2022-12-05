@@ -71,5 +71,6 @@ class KITTI(data.Dataset):
 
         if self.transforms is not None:
             data = self.transforms(data)
-
-        return  sample['taxonomy_id'], sample['model_id'], data['partial_cloud']
+        classV = np.zeros(self.clst)
+        classV[2] = 1
+        return  sample['taxonomy_id'], sample['model_id'], data['partial_cloud'], classV

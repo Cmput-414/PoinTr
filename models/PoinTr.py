@@ -44,29 +44,18 @@ class Fold(nn.Module):
             nn.Conv1d(hidden_dim//2, 3, 1),
         )
         self.Cls1 = nn.Sequential(
-            nn.Conv1d(3, hidden_dim//8, 1),
-            nn.BatchNorm1d(hidden_dim//8),
+            nn.Conv1d(224, 64, 3, 1, 1),
+            nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//8,hidden_dim//4,1),
-            nn.BatchNorm1d(hidden_dim//4),
+            nn.MaxPool1d(3, stride=2),
+            nn.Conv1d(64, 8, 3, 1, 1),
+            nn.BatchNorm1d(8),
             nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//4,hidden_dim//2,1),
-            nn.BatchNorm1d(hidden_dim//2),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//2,hidden_dim,1),
             nn.Flatten(),
         )
-        self.cf1 = nn.Linear(16384, 64)
-        self.cf2 = nn.Linear(64 , 8)
-        self.Cls2 = nn.Sequential(
-            nn.Conv1d(224, hidden_dim//2,1),
-            nn.BatchNorm1d(hidden_dim//2),
-            nn.ReLU(inplace=True),
-            nn.Conv1d(hidden_dim//2, hidden_dim,1),
-            nn.Flatten(),
-        )
-        self.cf3 = nn.Linear(2048,32)
-        self.cf4 = nn.Linear(32,8)
+        self.fc1 = nn.Linear(760, 64)
+        self.dropout = nn.Dropout(0.5)
+        self.fc2 = nn.Linear(64, 8)
         self.sf = nn.Softmax()
 
     def forward(self, x):
@@ -80,19 +69,17 @@ class Fold(nn.Module):
         fd1 = self.folding1(x)
         x = torch.cat([fd1, features], dim=1)
         fd2 = self.folding2(x) #3584, 3, 64
-        label1 = self.Cls1(fd2) #3584, 16384
-        label1 = self.cf1(label1) #3584, 64
-        label1 = self.cf2(label1) #3584, 8
-        label2 = label1.reshape(16,224,8) # 16 224 8
-        label2 = self.Cls2(label2) # 16, 2048
-        label2 = self.cf3(label2) # 16, 32
-        label2 = self.cf4(label2) # 16, 8
-        label2 = self.sf(label2) #softMax
+        label1 = fd2.reshape(16, 224, 192)
+        label1 = self.Cls1(label1) #16, 760
+        label1 = self.fc1(label1) #16, 64
+        label1 = self.dropout(label1)
+        label1 = self.fc2(label1) #16, 8
+
         
-        print(label1.size())
-        print(fd2.size())
+        #print(label1.size())
+        #print(fd2.size())
         #print(fd2.size()) 
-        return fd2,label2
+        return fd2,label1
 
 @MODELS.register_module()
 class PoinTr(nn.Module):
@@ -124,7 +111,7 @@ class PoinTr(nn.Module):
     def get_loss(self, ret, gt, vector):
         loss_coarse = self.loss_func(ret[0], gt)
         loss_fine = self.loss_func(ret[1], gt)
-        loss_Cls = self.C_E_loss_func(ret[2], vector)
+        loss_Cls = self.C_E_loss_func(ret[2], vector.long())
         return loss_coarse, loss_fine, loss_Cls
 
     def forward(self, xyz):
@@ -147,8 +134,8 @@ class PoinTr(nn.Module):
         # NOTE: foldingNet
         relative_xyz,label = self.foldingnet(rebuild_feature)
         relative_xyz = relative_xyz.reshape(B, M, 3, -1)    # B M 3 S
-        print(">>>>>>>>")
-        print(label)
+        #print(">>>>>>>>")
+        #print(label)
         rebuild_points = (relative_xyz + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)  # B N 3
 
         # NOTE: fc

@@ -80,16 +80,15 @@ class PCN(data.Dataset):
             samples = dc[subset]
 
             for s in samples:
-              classV1 = np.zeros(self.clst)
               i = 0
               find = False
               while find == False:
                 if dc == self.dataset_categories[i]:
-                  classV = classV1
-                  classV[i] = 1
-                  find = True
+                    classV = i
+                    find = True
                 else:
-                  i = i+1
+                    i = i+1
+
               file_list.append({
                     'taxonomy_id':
                     dc['taxonomy_id'],
@@ -112,7 +111,6 @@ class PCN(data.Dataset):
 
 
 
-
     def __getitem__(self, idx):
         sample = self.file_list[idx]
         data = {}
@@ -128,8 +126,12 @@ class PCN(data.Dataset):
 
         if self.transforms is not None:
             data = self.transforms(data)
-        
-        return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], sample['one_hot_vector'],sample['taxonomy_name'])
+        if self.cars:
+          classV = np.zeros(self.clst)
+          classV[2] = 1
+          return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], classV ,sample['taxonomy_name'])
+        else:
+          return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], sample['one_hot_vector'] ,sample['taxonomy_name'])
 
     def __len__(self):
         return len(self.file_list)
