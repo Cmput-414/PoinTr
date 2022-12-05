@@ -59,7 +59,6 @@ class Fold(nn.Module):
         self.sf = nn.Softmax()
 
     def forward(self, x):
-        #print(x.size()) #BM S.  Total_bs * num_Query, Token
         num_sample = self.step * self.step
         bs = x.size(0)
         features = x.view(bs, self.in_channel, 1).expand(bs, self.in_channel, num_sample)
@@ -69,17 +68,12 @@ class Fold(nn.Module):
         fd1 = self.folding1(x)
         x = torch.cat([fd1, features], dim=1)
         fd2 = self.folding2(x) #3584, 3, 64
-        label1 = fd2.reshape(16, 224, 192)
-        label1 = self.Cls1(label1) #16, 760
-        label1 = self.fc1(label1) #16, 64
-        label1 = self.dropout(label1)
-        label1 = self.fc2(label1) #16, 8
-
-        
-        #print(label1.size())
-        #print(fd2.size())
-        #print(fd2.size()) 
-        return fd2,label1
+        label = fd2.reshape(16, 224, 192)
+        label = self.Cls1(label) #16, 760
+        label = self.fc1(label) #16, 64
+        label = self.dropout(label)
+        label = self.fc2(label) #16, 8
+        return fd2,label
 
 @MODELS.register_module()
 class PoinTr(nn.Module):
