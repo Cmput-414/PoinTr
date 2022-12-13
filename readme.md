@@ -40,18 +40,32 @@ This project is 3D Point Cloud Inpainting.
 In this project, we add label to modify the lose function.  
 We also change the DG-CNN to improve the F-score and CDL.  
 ```mermaid
-flowchart TD
-    A[Start] --> B{runner.py} 
-    B -->|Train| C["def run_net()"]
-    B ---->|Test| E["def test_net()"]
-    C --> D{builder.py}
-    E --> D
-    subgraph Train
-    a1[not finished]-->bbb
+graph TD
+    A[Start]-->  Z("main.py\n It check if input command is going to train or test.\n If it is train, then call run_net().\n If it is test, then call test_net().")
+    Z --> B("runner.py\nThis python file contain run_net() and test_net().")
+    B -->|Train| C["def run_net()\n Input: rgs, config, train_writer, val_writer\n ***This function manager train process, \nit call others to finish training "]
+    B ---->|Test| E["def test_net()\n Input: test_net(args, config)\n ***This function manager tests, it use test() function"]
+    C -->|Call| D("builder.py\n This  file contain dataset_builder() and model_builder()")
+    E -->|Call| D
+    subgraph Train uu
+    a1["not finished"]-->|call| a2("dd\ndd\nmmmfrfmrfmrfmrfrfrfrfrfrf()r")
     end
     subgraph Test
-    b1[not finished]-->ss
+    b1["not finished\ncdcd"]-->|call| b2("dd\ndd\nmmmfrfmrfmrfmrfrfrfrfrfrf()r")
     end
+    subgraph Builder.py
+    D-->c10["def dataset_builder()\n use torch.utils.data.DataLoader to load data"]
+    D-->c20["def model_builder()"]
+    D-->c30["def save_checkpoint()"]
+    D-->c40["def load_model()"]
+    D-->c40["有一些resume啥的需要不？"]
+    c10 --> |call| c11("dd\ndd\nmmmfrfmrfmrfmrfrfrfrfrfrf()r")
+    c20 --> |Call| c21["build.py\n Inside model folder"]
+    c21 --> c22["def build_model_from_cfg()\n This function return a dataset"]
+    
+    
+    end
+
 ```
 
 ## Built With
