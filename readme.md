@@ -19,8 +19,8 @@
       <a href="#usage">Usage</a></li>
       <ul>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#Train">Train</a></li>
-        <li><a href="#Evaluation">Evaluation</a></li>
+        <li><a href="#train">Train</a></li>
+        <li><a href="#evaluation">Evaluation</a></li>
       </ul>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -113,6 +113,7 @@ There are two ways to set environments. We reconmende to use Colab.
     mv /content/pointr/data/ShapeNetCompletion /content/pointr/data/PCN
     ```
 <!-- USAGE EXAMPLES -->
+
 # Usage  
 
 ## Train  
