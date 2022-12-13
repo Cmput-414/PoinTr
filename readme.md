@@ -1,4 +1,3 @@
-<!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -13,12 +12,15 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <ul>
+        <li><a href="#step 1: set environments">Step 1: Set environments</a></li>
+        <li><a href="#Step 2: Set dataset">Step 2: Set dataset</a></li> 
+      </ul>
       </ul>
     </li>
     <li>
       <a href="#usage">Usage</a></li>
       <ul>
-        <li><a href="#installation">Installation</a></li>
         <li><a href="#train">Train</a></li>
         <li><a href="#evaluation">Evaluation</a></li>
       </ul>
@@ -30,8 +32,6 @@
 </details>
 
 
-
-<!-- ABOUT THE PROJECT -->
 # About The Project
  
 Project Link: [https://github.com/Cmput-414/PoinTr](https://github.com/Cmput-414/PoinTr)  
@@ -45,7 +45,7 @@ We also change the DG-CNN to improve the F-score and CDL.
 * [![Pytorch][Pytorch.com]][Pytorch-url]
 * [![Cuda][Cuda.com]][Cuda-url]
 
-<!-- GETTING STARTED -->
+
 # Getting Started
 There are two ways to set environments. We reconmende to use Colab.  
 - First is using [colab](https://github.com/Cmput-414/PoinTr/blob/master/Project%20Implementation2.ipynb).  
@@ -65,7 +65,7 @@ There are two ways to set environments. We reconmende to use Colab.
 
 ## Installation  
 
-### Step 1: Set environments
+### Step 1: Set environments  
 
 1. Git clone the code
     ```
@@ -95,7 +95,7 @@ There are two ways to set environments. We reconmende to use Colab.
     source activate myenv && cd /content/pointr/extensions/gridding && python setup.py install --user 
     source activate myenv && cd /content/pointr/extensions/gridding_loss && python setup.py install --user
     ```
-### Step 2: Set dataset 
+### Step 2: Set dataset  
 
 1. set KITTI dataset
     ```
@@ -112,7 +112,6 @@ There are two ways to set environments. We reconmende to use Colab.
     rm -rf /content/pointr/data/PCN
     mv /content/pointr/data/ShapeNetCompletion /content/pointr/data/PCN
     ```
-<!-- USAGE EXAMPLES -->
 
 # Usage  
 
@@ -164,7 +163,7 @@ After test, we will be able to see some visual result (images) in folder ./vis_r
     source activate myenv && which python && bash ./scripts/test.sh 0 --ckpts ./experiments/PoinTr/PCN_models/example/ckpt-best.pth --config ./cfgs/PCN_models/PoinTr.yaml --exp_name example
     ```
 
-<!-- CONTRIBUTING -->
+
 # Contributing
 
 What we do:  
@@ -174,13 +173,13 @@ What we do:
 
 
 
-<!-- LICENSE -->
+
 # License
 
 Distributed under the MIT License. 
 
 
-<!-- CONTACT -->
+
 # Contact
 
 | Name | Email |  
@@ -189,7 +188,6 @@ Distributed under the MIT License.
 | Peng Cheng | pcheng1@ualberta.ca |  
 
 
-<!-- ACKNOWLEDGMENTS -->
 # Acknowledgments
 
 * [Base code - Pointr](https://github.com/yuxumin/PoinTr)
