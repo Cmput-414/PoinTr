@@ -13,8 +13,8 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <ul>
-        <li><a href="#step 1: set environments">Step 1: Set environments</a></li>
-        <li><a href="#Step 2: Set dataset">Step 2: Set dataset</a></li> 
+        <li><a href="#step-1:-set-environments">Step 1: Set environments</a></li>
+        <li><a href="#step-2:-set-dataset">Step 2: Set dataset</a></li> 
       </ul>
       </ul>
     </li>
