@@ -123,7 +123,7 @@ There are 2 ways to set dataset, we reconmend to use frist method:
 - Second method:  
 You will need to dowload them or add them to your google drive.  
 Follow the data structure in [new_data.md](./new_data.md).  
-Make sur set the data into correct location.  
+Make sure set the data into correct location.   
 
     | dataset  | url| performance |
     | --- | --- |  --- |
