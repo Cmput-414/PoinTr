@@ -11,14 +11,14 @@
 		 - def  validate()
 	 - Call Builder.py inside test_net() and run_net()
 		 - def dataset_builder()
-			 -   train : { _base_: cfgs/dataset_configs/PCNCars.yaml, 
+			- train : { _base_: cfgs/dataset_configs/PCNCars.yaml, 
             others: {subset: 'train'}},
-		            - groud truth
-		            - complete dataeset
+		    	- groud truth
+		        - complete dataeset
 			-  val : { _base_: cfgs/dataset_configs/PCNCars.yaml, 
             others: {subset: 'test'}},
-				            -  groud truth
-							-  comare with train data
+				-  groud truth
+				-  comare with train data
             - test : { _base_: cfgs/dataset_configs/KITTI.yaml, 
             others: {subset: 'test'}}}
 	            - only partial 
