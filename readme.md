@@ -130,24 +130,6 @@ Make sure set the data into correct location.
     | PCN |   [[Google Drive](https://drive.google.com/file/d/182xUHiUyIQhgqstFTVPoCyYyxmdiZlxq/view?usp=sharing)] | CD = 8.38e-3|
     | KITTI | [[Google Drive](https://drive.google.com/file/d/1oPwXplvn9mR0dI9V7Xjw4RhGwrnBU4dg/view?usp=sharing)]  | MMD = 5.04e-4 | 
 
-
-
-1. set KITTI dataset
-    ```
-    cp -r '/content/drive/Shareddrives/Pointr/kitti/bboxes' /content/pointr/data/KITTI
-    cp -r '/content/drive/Shareddrives/Pointr/kitti/cars' /content/pointr/data/KITTI
-    cp -r '/content/drive/Shareddrives/Pointr/kitti/tracklets' /content/pointr/data/KITTI
-    ```
-2. Set ShapeNetCompletion (PCN) dataset  
-
-    ```
-    unzip /content/drive/Shareddrives/Pointr/ShapeNetCompletion.zip -d /content/pointr/data
-    cp -r '/content/pointr/data/PCN/PCN.json' /content/pointr/data/ShapeNetCompletion
-    cp -r '/content/pointr/data/PCN/category.txt' /content/pointr/data/ShapeNetCompletion
-    rm -rf /content/pointr/data/PCN
-    mv /content/pointr/data/ShapeNetCompletion /content/pointr/data/PCN
-    ```
-
 # Usage  
 
 ## Train  
