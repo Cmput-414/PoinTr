@@ -125,10 +125,10 @@ You will need to dowload them or add them to your google drive.
 Follow the data structure in [new_data.md](./new_data.md).  
 Make sur set the data into correct location.  
 
-| dataset  | url| performance |
-| --- | --- |  --- |
-| PCN |   [[Google Drive](https://drive.google.com/file/d/182xUHiUyIQhgqstFTVPoCyYyxmdiZlxq/view?usp=sharing)] | CD = 8.38e-3|
-| KITTI | [[Google Drive](https://drive.google.com/file/d/1oPwXplvn9mR0dI9V7Xjw4RhGwrnBU4dg/view?usp=sharing)]  | MMD = 5.04e-4 | 
+    | dataset  | url| performance |
+    | --- | --- |  --- |
+    | PCN |   [[Google Drive](https://drive.google.com/file/d/182xUHiUyIQhgqstFTVPoCyYyxmdiZlxq/view?usp=sharing)] | CD = 8.38e-3|
+    | KITTI | [[Google Drive](https://drive.google.com/file/d/1oPwXplvn9mR0dI9V7Xjw4RhGwrnBU4dg/view?usp=sharing)]  | MMD = 5.04e-4 | 
 
 
 
