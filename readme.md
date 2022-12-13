@@ -105,7 +105,9 @@ There are 2 ways to set dataset, we reconmend to use frist method:
         from google.colab import drive
         drive.mount('/content/drive')
         ```
-  2. Then run rest code to set dataset
+  2. Then run rest code to set dataset  
+  *sometimes Colab use gdrive as google drive folder-
+  ex: /content/**g**drive/Shareddrives
       1. set KITTI dataset
             ```
             cp -r '/content/drive/Shareddrives/Pointr/kitti/bboxes' /content/pointr/data/KITTI
