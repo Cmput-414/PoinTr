@@ -39,6 +39,20 @@ Project Link: [https://github.com/Cmput-414/PoinTr](https://github.com/Cmput-414
 This project is 3D Point Cloud Inpainting.  
 In this project, we add label to modify the lose function.  
 We also change the DG-CNN to improve the F-score and CDL.  
+```mermaid
+flowchart TD
+    A[Start] --> B{runner.py} 
+    B -->|Train| C["def run_net()"]
+    B ---->|Test| E["def test_net()"]
+    C --> D{builder.py}
+    E --> D
+    subgraph Train
+    a1[not finished]-->bbb
+    end
+    subgraph Test
+    b1[not finished]-->ss
+    end
+```
 
 ## Built With
 * [![Python][Python.com]][Python-url]
