@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     A[Start]-->  Z("main.py\n It check if input command is going to train or test.\n If it is train, then call run_net().\n If it is test, then call test_net().")
     Z --> B("runner.py\nThis python file contain run_net() and test_net().")
@@ -57,3 +58,5 @@ graph TD
     BST --> ST
     ST --> PT
     PT --> LS
+    
+```
