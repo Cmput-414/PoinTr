@@ -2,10 +2,21 @@
 graph TD
     A[Start]-->  Z("main.py\n It check if input command is going to train or test.\n If it is train, then call run_net().\n If it is test, then call test_net().")
     Z --> B("runner.py\nThis python file contain run_net() and test_net().")
+    B -->|Train| C
+    B -->|Test| T1
+    
     subgraph TP ["Training Process"]
     C["def run_net()\n Input: args, config, train_writer, val_writer\n ***This function manage training process, \nit call builder.py first before start training "]
-    C --> BD
-    LS --> D("Save a check point")
+    C --> D1
+    L1 --> D("Save a check point")
+    D1 --> |"Then go back to def run_net() function, do rest process"| C2
+    C2 --> S1
+    S1 --> P1
+    P1 --> L1
+    end
+
+
+    
     subgraph BST ["Before start training"]
     direction TB
     C2("First, check if  args is contain information\n about resume, distributed, parallel\n These will make training faster ")
@@ -33,7 +44,7 @@ graph TD
     S2 --> S3("Check dataset to get Partial (incomplete model):\n KITTI\n PCN")
     S3 -->|If datset is PCN| S4("Partial from train_dataloader")
     S3 -->|If datset is KITTI| S5("Partial from def random_dropping() inside misc.py")
-    end
+    end    
     subgraph PT ["PoinTr Model"]
     direction TB
     P1("PoinTr.py\n Input: xyz(Partial)\n Output: coarse_point_cloud, rebuild_points,label")
@@ -42,21 +53,15 @@ graph TD
     P3 --> P4("Step 3: FoldingNet")
     P4 --> P5("Step 4: fps")
     P5 --> P6("Step 5: return ret =(coarse_point_cloud, rebuild_points,label) ")
-    end
+    end   
     subgraph LS ["Lose function"]
     direction TB
     L1("def get_loss()\n Input: ret, gt(groudtruth), vector(category)\n Output: loss_coarse, loss_fine, loss_Cls")
     L1 --> L2("Compare lose function and loop epoch again ...")
     end
+    subgraph TS ["Test"]
+    direction TB
+    T1("def test_net()\n Input: test_net(args, config)\n ***This function manage tests, it use test() function") --> T2
+    T2 --> T3
     end
-    subgraph TS [Test]
-    T1["def test_net()\n Input: test_net(args, config)\n ***This function manage tests, it use test() function"]
-    end
-    B -->|Train| TP
-    B -->|Test| TS
-    BD --> |"Then go back to def run_net() function, do rest process"| BST
-    BST --> ST
-    ST --> PT
-    PT --> LS
-    
 ```
