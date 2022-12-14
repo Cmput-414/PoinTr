@@ -108,6 +108,11 @@ def save_checkpoint(base_model, optimizer, epoch, metrics, best_metrics, prefix,
         print_log(f"Save checkpoint at {os.path.join(args.experiment_path, prefix + '.pth')}", logger = logger)
 
 def load_model(base_model, ckpt_path, logger = None):
+    """
+    used when resume a ckpt, used this functioninside test_net() and run_net()
+    run_net() use this function to resume a model
+    test_net() use this function to load a model based on check point ckpt
+    """
     if not os.path.exists(ckpt_path):
         raise NotImplementedError('no checkpoint file from path %s...' % ckpt_path)
     print_log(f'Loading weights from {ckpt_path}...', logger = logger )
