@@ -34,8 +34,8 @@
 
 # About The Project
  
-Project Link: [https://github.com/Cmput-414/PoinTr](https://github.com/Cmput-414/PoinTr)  
-
+[Project Link](https://github.com/Cmput-414/PoinTr)  
+[Click Here to see Original Author's readme.md](https://github.com/Cmput-414/PoinTr/blob/master/README_old.md)  
 This project is 3D Point Cloud Inpainting.  
 In this project, we add label to modify the lose function.  
 We also change the DG-CNN to improve the F-score and CDL.  
