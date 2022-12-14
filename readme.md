@@ -40,58 +40,9 @@ This project is 3D Point Cloud Inpainting.
 In this project, we add label to modify the lose function.  
 We also change the DG-CNN to improve the F-score and CDL.  
 # *** DIAGRAM NOT FINISHED***
-```mermaid
-graph TD
-    A[Start]-->  Z("main.py\n It check if input command is going to train or test.\n If it is train, then call run_net().\n If it is test, then call test_net().")
-    Z --> B("runner.py\nThis python file contain run_net() and test_net().")
+[Project flow chart.md](./ccccc.md).  
 
-    
-    subgraph BST ["Before start training"]
-    direction TB
-    C2("First, check if  args is contain information\n about resume, distributed, parallel\n These will make training faster ")
-    C2 --> C3("Resume check point (ckpt)")
-    C3 -->|If args.resume| C33("Call def resume_model()")
-    C3 -->|If args.start_ckpts is not None| C34("Call def load_model()")
-    C2 --> C22("Check Distributed/Parallel")
-    C22 -->|If args.distributed| C4(Using Distributed Data parallel)
-    C22 -->|If not args.distributed| C5(Using Data parallel)
-    end
-    subgraph BD [Builder.py]
-    direction TB
-    D1("builder.py\n This  file contain dataset_builder() and model_builder()\n def run_net() will first call dataset_builder() to build dataset\n Then call model_builder() to build model ")
-    D1-->c10["def dataset_builder()\n use torch.utils.data.DataLoader to load data\n return sampler, dataloader"]
-    D1-->c20["def model_builder()\n return base_model"]
-    D1-->c30["def save_checkpoint()\n Save ckpt at ./experiments"]
-    D1-->c40["def load_model()\n Load model in run_net() based on args\nLoad and evaluation a ckpt on test_net() based on ckpt"]
-    D1-->c50["def resume_model()\n Resume a ckpt in run_net()\nif args is resume "]
-    c20 --> |Call| c21["build.py\n Inside model folder"]
-    c21 -->|Call| c22["def build_model_from_cfg()\nReturn a constructed dataset specified by dataset_name"]
-    end
-    subgraph ST ["Start training"]
-    direction TB
-    S1("Start loop Epoch") --> S2("Set model to training mode")
-    S2 --> S3("Check dataset to get Partial (incomplete model):\n KITTI\n PCN")
-    S3 -->|If datset is PCN| S4("Partial from train_dataloader")
-    S3 -->|If datset is KITTI| S5("Partial from def random_dropping() inside misc.py")
-    end    
-    subgraph PT ["PoinTr Model"]
-    direction TB
-    P1("PoinTr.py\n Input: xyz(Partial)\n Output: coarse_point_cloud, rebuild_points,label")
-    P1 --> P2("Step 1: Use PCTransformer\n PCTransformer is from outside\n Return query, coarse_point_cloud")
-    P2 --> P3("Step 2: Rebuild point cloud")
-    P3 --> P4("Step 3: FoldingNet")
-    P4 --> P5("Step 4: fps")
-    P5 --> P6("Step 5: return ret =(coarse_point_cloud, rebuild_points,label) ")
-    end   
-    subgraph LS ["Lose function"]
-    direction TB
-    L1("def get_loss()\n Input: ret, gt(groudtruth), vector(category)\n Output: loss_coarse, loss_fine, loss_Cls")
-    L1 --> L2("Compare lose function and loop epoch again ...")
-    end
-
-
-```
-
+[![Project Flow chart](https://mermaid.ink/img/pako:eNqNV22P2jgQ_itWPkGV0pJA2UW6k27hKlW37UUl_dKlQiZxIGqIc47Tlpb-93vGzhssXXX3A9ieGc8888x4-OFEMhbO3NkpXuxZuFznDH9_Paw0V_rT8-d_MvZxsHYOPM1HxXGN4zeaRXsRfWZpwtK8qLCUhwPPY5aWbCfTfMe0ZFpBg0nFtCj1yOhBXJOMOXKZ3oucRTzLmKryTS70YHghB82-GK0bOWdoHf3IyMU7eAgjuVDWx3AP9eKo9zJnSZoJeJhr8qe9iZG_1wzekcFTSC6eWBicbUIceyu7t87tZ1lta-wC9rB2jCZhECgZibJcO5-s3AKHsUg6F0yshN-ccbUrXXIySXeuxWfzVaVaKJd94Vn9nRSePXtmgkuqPNIpwgPwfCesDl1b2GtdBmnAaIDbVmkWG2yAhio124pEKsFKynGn2rlqQa25cL8yyyUwXvEvgvE6_QVSrTvclkbqBAQoYTvJthxCYMJZ0K3jLoslU0C08XjtnNjdKqytrUJjrlnXy6BeBnZ5X6dC5PFFLkgfeN9di7MNM06VsCCGd3XgHoJ8TRC5HcdNdoiPDYnSHFYPnDQpJXwrUQMIpToIRJWWWqXbSovYZQVXwF9kJAZYSsG-psjHgX_uZSzhJZLLWiQXnglu4cOX98ZqH3A2iD4XethJ-4abKBpyc2TdOGGb1BeUfYO_2d4cUOvZ4JfKBqcN2Tfx5lKzdzI31iZ9a5nk8WNbtdseYbgwDi87LF4EDRSdvHd2eQ84XDgZfCgJnJ4JtuSat5A-tkLuXrE0bSxd0b5CnCV7uGvL5ZdEWY4RZFdWNr-A7LzbxLiyFHpTC9ZdxwDX7ZHueYkYjthCNeX72Ayqyiyao5pfdZ-8uKCTNgcd0ZZjIBeNX9aN6dE1ZLUCZ7VU0X5U6TQDthAaEZT34ABYC9vEBqNM8kroSuWs5Icio-5F-5kRbcvOXus1116BozayhTuWZhe6fqNboh9tTHGY2rDapkkRiRnXbPRCfCuESg8i1-WFmUlj5ozPkKDYarDO3gxyKGagAdEMgkaOUirQpCvTEKg70tX41r0unSKdXXgxbby4qFHI1NVfm-y7Qs09aRuT1ez6N8C1zZgq9oTl-KFma_OE52UaizrERGb99EDaVFSj69XuGX3r3SZR8rCJkp1x5L3NFifao_CqiGq1JhMrCxGlSYqd7bFlWM4Por3vcQ3a3r363aa9olq00pmUBfu7kNEeJLcPCHWjFRyxsTaDCTUE2mlrYWW718pvm1cTAVR2-ED_0inP2CDNMe6A3LrGbzgnRP95E4Zv6EuweNcZbdsrjJEt5ArnJ7aidtpYJDDrN79fLU_YMJfByvTSiqERCInsxEoWBcIE-9I622kZUf6dXza_wAAfoJRCxd6eFd5j2AOC3cq2rDLDzLfj90HtlWHxv5U2-5HkCgVtKnUTZbLCA6mEpZXZLN2Mb3svRDC2j75JoRYFG8_ZB_SjYIEhKy_pEbZD0dkGAWTAwKtMcdtCMhT9rxLq6F5xpLvS0iDwmyu9OZRt97TP74W8b-Unjbw_Z69RTwD-neiGo2BixaaN2GTOkqLszqf2_FVzPp03TRAf7I_B72I3ZE-kF4Mc0nsvAWEzhT2R33vKLxEK7N9ksizPJla45bKdHuwUfEHR6_0QoypMSDWIuBY7qY5n2ScLGxuGaxdJmjdfF1mHxb3N-r0ZI1BpHANc1vfZdFxT6YIqnfEdvbWj0eiJ0EMTOg3wT0QcNhF3nbsXcbvZH9aHT87k0IAkpnDzimLVm3-bBhV69eWWeaHfC6H7odH8O64DiuPHWIyfbD_ofO3gBxK10zkzzvMqQ4zr_CdEeaXl6phHzhwZEq5TFeghYplygHJoNgueO_MfzjdnPvFH49lsMvYns_HtzdT3XefozJ97_mR0609uJuOb2c2t7439n67zXUpY8EYvZ_7t2JvMXs286auX3tTY-2gOyfzP_wHMjK4l?type=png)](https://mermaid.live/edit#pako:eNqNV22P2jgQ_itWPkGV0pJA2UW6k27hKlW37UUl_dKlQiZxIGqIc47Tlpb-93vGzhssXXX3A9ieGc8888x4-OFEMhbO3NkpXuxZuFznDH9_Paw0V_rT8-d_MvZxsHYOPM1HxXGN4zeaRXsRfWZpwtK8qLCUhwPPY5aWbCfTfMe0ZFpBg0nFtCj1yOhBXJOMOXKZ3oucRTzLmKryTS70YHghB82-GK0bOWdoHf3IyMU7eAgjuVDWx3AP9eKo9zJnSZoJeJhr8qe9iZG_1wzekcFTSC6eWBicbUIceyu7t87tZ1lta-wC9rB2jCZhECgZibJcO5-s3AKHsUg6F0yshN-ccbUrXXIySXeuxWfzVaVaKJd94Vn9nRSePXtmgkuqPNIpwgPwfCesDl1b2GtdBmnAaIDbVmkWG2yAhio124pEKsFKynGn2rlqQa25cL8yyyUwXvEvgvE6_QVSrTvclkbqBAQoYTvJthxCYMJZ0K3jLoslU0C08XjtnNjdKqytrUJjrlnXy6BeBnZ5X6dC5PFFLkgfeN9di7MNM06VsCCGd3XgHoJ8TRC5HcdNdoiPDYnSHFYPnDQpJXwrUQMIpToIRJWWWqXbSovYZQVXwF9kJAZYSsG-psjHgX_uZSzhJZLLWiQXnglu4cOX98ZqH3A2iD4XethJ-4abKBpyc2TdOGGb1BeUfYO_2d4cUOvZ4JfKBqcN2Tfx5lKzdzI31iZ9a5nk8WNbtdseYbgwDi87LF4EDRSdvHd2eQ84XDgZfCgJnJ4JtuSat5A-tkLuXrE0bSxd0b5CnCV7uGvL5ZdEWY4RZFdWNr-A7LzbxLiyFHpTC9ZdxwDX7ZHueYkYjthCNeX72Ayqyiyao5pfdZ-8uKCTNgcd0ZZjIBeNX9aN6dE1ZLUCZ7VU0X5U6TQDthAaEZT34ABYC9vEBqNM8kroSuWs5Icio-5F-5kRbcvOXus1116BozayhTuWZhe6fqNboh9tTHGY2rDapkkRiRnXbPRCfCuESg8i1-WFmUlj5ozPkKDYarDO3gxyKGagAdEMgkaOUirQpCvTEKg70tX41r0unSKdXXgxbby4qFHI1NVfm-y7Qs09aRuT1ez6N8C1zZgq9oTl-KFma_OE52UaizrERGb99EDaVFSj69XuGX3r3SZR8rCJkp1x5L3NFifao_CqiGq1JhMrCxGlSYqd7bFlWM4Por3vcQ3a3r363aa9olq00pmUBfu7kNEeJLcPCHWjFRyxsTaDCTUE2mlrYWW718pvm1cTAVR2-ED_0inP2CDNMe6A3LrGbzgnRP95E4Zv6EuweNcZbdsrjJEt5ArnJ7aidtpYJDDrN79fLU_YMJfByvTSiqERCInsxEoWBcIE-9I622kZUf6dXza_wAAfoJRCxd6eFd5j2AOC3cq2rDLDzLfj90HtlWHxv5U2-5HkCgVtKnUTZbLCA6mEpZXZLN2Mb3svRDC2j75JoRYFG8_ZB_SjYIEhKy_pEbZD0dkGAWTAwKtMcdtCMhT9rxLq6F5xpLvS0iDwmyu9OZRt97TP74W8b-Unjbw_Z69RTwD-neiGo2BixaaN2GTOkqLszqf2_FVzPp03TRAf7I_B72I3ZE-kF4Mc0nsvAWEzhT2R33vKLxEK7N9ksizPJla45bKdHuwUfEHR6_0QoypMSDWIuBY7qY5n2ScLGxuGaxdJmjdfF1mHxb3N-r0ZI1BpHANc1vfZdFxT6YIqnfEdvbWj0eiJ0EMTOg3wT0QcNhF3nbsXcbvZH9aHT87k0IAkpnDzimLVm3-bBhV69eWWeaHfC6H7odH8O64DiuPHWIyfbD_ofO3gBxK10zkzzvMqQ4zr_CdEeaXl6phHzhwZEq5TFeghYplygHJoNgueO_MfzjdnPvFH49lsMvYns_HtzdT3XefozJ97_mR0609uJuOb2c2t7439n67zXUpY8EYvZ_7t2JvMXs286auX3tTY-2gOyfzP_wHMjK4l)
 ## Built With
 * [![Python][Python.com]][Python-url]
 * [![Pytorch][Pytorch.com]][Pytorch-url]
