@@ -57,15 +57,24 @@
 - Main function
 - Accept user's input and process the user's command.
 - It will accept yaml format as input, yaml file contain information about model type, batch size, and epoch ...
-- Call get_args() to get user's input based on argument.
+- Call get_args(), return args
+- Call get_config(), return config
 - Based on argument, check input is contain information about train, test, and resume ...  
-- If contain test, it will call test_net()
-- If contain train, it will call run_net()
+- If contain test, it will call test_net(args, config)
+- If contain train, it will call run_net(args, config, train_writer, val_writer)
+)
 - If contain resume, it will call resume_model() to resume a model.
 
 # runner.py
 ## def run_net()
 - This function manage training process
+- Input: args, config, train_writer=None, val_writer=None
+- Output: checkpoint, model
+- It call dataset_builder() and model_builder() in builder.py.
+- Check args, decide if resume a model, or distributed running
+- Start training, call PoinTr.py
+- For each epoch, compare metrics and save it as best_metrics, save it as a checkpoint.
+- Upadte lose function, and update F-score, CDL1, CDL2
 
 ## def validate()
 - temp 1
