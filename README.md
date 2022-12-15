@@ -187,7 +187,10 @@ After test, we will be able to see some visual result (images) in folder ./vis_r
 # Contributing
 
 What we do:  
-
+1. Add label to modify the lose function.  
+2. Change the DG-CNN to improve the F-score and CDL.
+3. Draw a flowchart for project
+4. Write a documentation for code.
 
 
 
