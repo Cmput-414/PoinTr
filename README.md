@@ -71,7 +71,7 @@ There are two ways to set environments. We **recommend** to use Colab.
 
 1. Git clone the code
     ```
-    git clone https://github.com/Cmput-414/PoinTr.git
+    git clone https://github.com/Cmput-414/PoinTr.git pointr
     ```
 2. Install the code to create a virtual environment
     ```
