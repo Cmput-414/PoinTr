@@ -211,7 +211,7 @@ Distributed under the MIT License.
 
 # Acknowledgments
 
-* [Base code - Pointr](https://github.com/yuxumin/PoinTr)
+* [Paper & Base code - Pointr](https://github.com/yuxumin/PoinTr) -  [Xumin Yu](https://yuxumin.github.io/)\*, [Yongming Rao](https://raoyongming.github.io/)\*, [Ziyi Wang](https://github.com/LavenderLA), [Zuyan Liu](https://github.com/lzy-19), [Jiwen Lu](https://scholar.google.com/citations?user=TN8uDQoAAAAJ&hl=en&authuser=1), [Jie Zhou](https://scholar.google.com/citations?user=6a79aPwAAAAJ&hl=en&authuser=1)    
 * [ReadMe file format](https://github.com/othneildrew/Best-README-Template)
 
 
