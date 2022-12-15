@@ -45,8 +45,8 @@
         <li><a href="#class-dgcnn_grouper">class DGCNN_Grouper()</a></li>
       </ul>
     </li>
-    <li><a href="#parser.py">License</a></li>
-    <li><a href="#misc.py">Contact</a></li>
+    <li><a href="#parserpy">parser.py</a></li>
+    <li><a href="#miscpy">misc.py</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -145,4 +145,7 @@
 - temp 3
 
 
-
+# parser.py
+- temp 1
+# misc.py
+- temp 1
