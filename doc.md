@@ -53,7 +53,22 @@
       </ul>
     </li>
     <li><a href="#parserpy">parser.py</a></li>
+    <ul>
+        <li><a href="#def-get_args">def get_args()</a></li>
+        <li><a href="#def-create_experiment_dir">def create_experiment_dir()</a></li>
+      </ul>
     <li><a href="#miscpy">misc.py</a></li>
+    <ul>
+        <li><a href="#def-seprate_point_cloud">def seprate_point_cloud()</a></li>
+        <li><a href="#def-visualize_kitti">def visualize_KITTI()</a></li>
+        <li><a href="#def-random_dropping">def random_dropping()</a></li>
+        <li><a href="#def-get_ptcloud_img">def get_ptcloud_img()</a></li>
+        <li><a href="#def-fps">def fps()</a></li>
+        <li><a href="#def-worker_init_fn">def worker_init_fn()</a></li>
+        <li><a href="#def-set_random_seed">def set_random_seed()</a></li>
+        <li><a href="#def-is_seq_of">def is_seq_of()</a></li>
+        <li><a href="#class-bnmomentumscheduler">class BNMomentumScheduler()</a></li>
+      </ul>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -240,6 +255,62 @@ This python file contain Pointr model.
 ## PCNDataset.py
 
 # parser.py
-- temp 1
+## def get_args()
+## def create_experiment_dir()
+
+
 # misc.py
-- temp 1
+## def seprate_point_cloud()
+- This function using to generate the incomplete point cloud with a setted number.  
+- Input: xyz, num_points, crop, fixed_points = None, padding_zeros = False
+- Output: input_data.contiguous(), crop_data.contiguous()  
+- First loop the ground Truth, for each ground Truth, get incomplete model.  
+- Seprate point cloud, to get two parts: input_data, crop_data.  
+- Use fps() to downsmaple the input_data and crop_data.  
+- run_net.py use this function to get partial model. 
+
+## def visualize_KITTI()
+- This function save visual result for prediect model.  
+- Input: path, data_list, titles = ['input','pred'], cmap=['bwr','autumn'], zdir='y', 
+                         xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1)  
+- Output: save image into ./experiements
+- Based on given data list, use plt larbiary to draw figure.  
+## def random_dropping()
+- This function specially for KITTI finetune
+- Input: partital model, epoch index
+- Output: partital model  
+- This function also use fps() to dwonsample point cloud.  
+- This function only used in run_net() function, when the dataset is KITTI.
+## def get_ptcloud_img()
+- This function output point cloud image.  
+- Input: Partial point cloud  
+- Output: image (nump array)  
+- validate() function use it. 
+## def fps()
+- This function is downsmaple. 
+- Input: pc (point cloud), num (number)
+- Output: sub_pc
+- Downsample point cloud 
+## def worker_init_fn()
+- This function used in dataloader to define worker.  
+- Input: worker
+- Output: None
+- Set process-local variable like the seed for random module in a sub-process
+## def set_random_seed()
+- Set random seed.  
+- Input:  
+    seed (int): Seed to be used.  
+    deterministic (bool): Whether to set the deterministic option for  
+        CUDNN backend, i.e., set `torch.backends.cudnn.deterministic` to True and `torch.backends.cudnn.benchmark` to False.  
+        Default: False.  
+- Output: 
+## def is_seq_of()
+- Check whether it is a sequence of some type.
+- Input:  
+        seq (Sequence): The sequence to be checked.  
+        expected_type (type): Expected type of sequence items.  
+        seq_type (type, optional): Expected sequence type.  
+- Returns:  
+        bool: Whether the sequence is valid.
+## class BNMomentumScheduler()
+- This class build scheduler
