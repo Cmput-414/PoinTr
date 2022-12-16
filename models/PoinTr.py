@@ -22,12 +22,20 @@ class CNNet(nn.Module):
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool1d(3, stride=2),
-            nn.Conv1d(64, 8, 3, 1, 1),
+            nn.Conv1d(64, 32, 3, 1, 1),
+            nn.BatchNorm1d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool1d(3, stride=2),
+            nn.Conv1d(32, 16, 3, 1, 1),
+            nn.BatchNorm1d(16),
+            nn.ReLU(inplace=True),
+            nn.MaxPool1d(3, stride=2),
+            nn.Conv1d(16, 8, 3, 1, 1),
             nn.BatchNorm1d(8),
             nn.ReLU(inplace=True),
             nn.Flatten(),
         )
-        self.fc1 = nn.Linear(760, 64)
+        self.fc1 = nn.Linear(184, 64)
         self.dropout = nn.Dropout(0.5)
         self.fc2 = nn.Linear(64, 8)
         self.sf = nn.Softmax()
