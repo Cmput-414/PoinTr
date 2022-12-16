@@ -26,6 +26,7 @@
         <li><a href="#def-dataset_builder">def dataset_builder()</a></li>
         <li><a href="#def-model_builder">def model_builder()</a></li>
         <li><a href="#def-resume_model">def resume_model()</a></li>
+        <li><a href="#def-build_opti_sche">def build_opti_sche()</a></li>
         <li><a href="#def-resume_optimizer">def resume_optimizer()</a></li>
         <li><a href="#def-save_checkpoint">def save_checkpoint()</a></li>
         <li><a href="#def-load_model">def load_model()</a></li>
@@ -53,12 +54,13 @@
 
 
 # main.py
+This python file accept input and decide which function to running.  
 ## def main():  
 - Main function
 - Accept user's input and process the user's command.
 - It will accept yaml format as input, yaml file contain information about model type, batch size, and epoch ...
-- Call get_args(), return args
-- Call get_config(), return config
+- Call get_args(), return args 
+- Call get_config(), return config (yaml format)
 - Based on argument, check input is contain information about train, test, and resume ...  
 - If contain test, it will call test_net(args, config)
 - If contain train, it will call run_net(args, config, train_writer, val_writer)
@@ -66,6 +68,7 @@
 - If contain resume, it will call resume_model() to resume a model.
 
 # runner.py
+This python file to manage training and test process.  
 ## def run_net()
 - This function manage training process
 - Input: args, config, train_writer=None, val_writer=None
@@ -110,38 +113,75 @@
 
 
 # builder.py
-- temp 1
+This python file build dataset and model.  
 ## def dataset_builder()
-- temp 1
-- temp 2
-- temp 3
+- This function build dataset.  
+- Input: args, config  
+- Output: sampler, dataloader  
+- Use DataLoader to load data based on given dataset.  
+
 ## def model_builder()
-- temp 1
-- temp 2
-- temp 3
+- This function build model.  
+- Input: config  
+- Output: model  
+- Call build_model_from_cfg() function to return a model  
+- build_model_from_cfg() is inside build.py  
+- build_model_from_cfg() call register.py to register model
+- In register.py, class Register: 
+  - Example:
+        MODELS = Registry('models')  
+        @MODELS.register_module()   
+        class ResNet:  
+            pass  
+        resnet = MODELS.build(dict(NAME='ResNet'))  
+- Then run_net() will use output model to continue training.  
 ## def resume_model()
-- temp 1
-- temp 2
-- temp 3
-## def resume_optimizer()
-- temp 1
-- temp 2
-- temp 3
-## def save_checkpoint()
-- temp 1
-- temp 2
-- temp 3
-## def load_model()
-- temp 1
-- temp 2
-- temp 3
+- This function resume model.  
+- Input: base_model, args, logger = None
+- Output: start_epoch, best_metrics
+- Resume a model based on last check point  
+- First to check if ckpt path is exist.  
+- If ckpt path is exist, get state dictionary, find parameter based on the dictionary.  
+- Find start_epoch and best_metrics based on dictionary.  
+- Return these value to run_net().  
 ## def build_opti_sche()
-- temp 1
-- temp 2
-- temp 3
+- This function build optimizer, scheduler  
+- Input: base_model, config
+- Output: optimizer, scheduler  
+- This function will check optim to set approiate optimizer. (AdamW, Adam, SGD)  - Set scheduler based on config.scheduler.  
+- run_net() will pass output to resume optimizer.  
+
+
+## def resume_optimizer()
+- This function resume optimizer.  
+- Input: optimizer, args, logger = None
+- Output: None
+- First to check if ./experiemnts path is exist.  This directory contain information about training result.  
+- If path is exist, get state dictionary, find optimizer.
+
+## def save_checkpoint()
+- This function save ckpt in to ./experiemnts  
+- Input: base_model, optimizer, epoch, metrics, best_metrics, prefix, args, logger = None  
+- Output: Save ckpt into ./experiemnts (format is .pth)
+- Save ckpt based on given model, optimzier, epoch, metrics, and best_mertics.  
+- Example: 
+   - {
+    'base_model' : base_model.module.state_dict() if args.distributed else base_model.state_dict(),  
+    'optimizer' : optimizer.state_dict(),  
+    'epoch' : epoch,  
+    'metrics' : metrics.state_dict() if metrics is not None else dict(),  
+    'best_metrics' : best_metrics.state_dict() if best_metrics is not None else dict(),  
+    }
+- run_net() will use this function.  
+## def load_model()
+- This function to load ckpt 
+- Input: base_model, ckpt_path, logger = None
+- Output: None
+- run_net() will call this function to resume ckpt based on given ckpt  
+- test_net() and run() will use this function.  
 
 # pointr.py
-- temp 1
+This python file contain Pointr model.  
 ## def fps()
 - temp 1
 - temp 2
