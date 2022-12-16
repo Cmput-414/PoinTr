@@ -99,7 +99,7 @@ There are two ways to set environments. We **recommend** to use Colab.
 ### Step 2: Set dataset  
 There are 2 ways to set dataset, we **recommend** to use frist method:  
 - **First method**:  
- We aleady shared a google drive folder to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
+ We aleady shared a google drive folder[Pointr] to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
  After you access the shared folder, you can run below code to set dataset.  
   1. First connect to your google drive to access shared drive
         ```
