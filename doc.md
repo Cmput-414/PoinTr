@@ -219,7 +219,7 @@ This python file contain Pointr model.
 - temp 3
 
 # dgcnn_group.py
-- temp 1
+- This python file contain DGCNN.
 
 ## def knn_point()
 - Input:  
@@ -249,17 +249,33 @@ This python file contain Pointr model.
 - It repeat above process to get final coordinate and feature.
 
 # dataset  
-
+This folder manage dataloder, to load dataset from data file.
 ## KITTIDataset.py
-
+This python file contain KITTI class.  
+- It load data from data file.  
+- Prepare file list for the dataset.  
+- Based on file list, to get ground truth and partial model.  
 ## PCNDataset.py
+This python file contain PCN class.
+- It load data from data file.  
+- Prepare file list for the dataset.  
+- Based on file list, to get ground truth and partial model.  
 
 # parser.py
+This python file manage user's input.
 ## def get_args()
+- This function add argument from input command.
+- Input: User's input
+- Output: args
+- Check and add argument `--config`, `--resume`, `--test`, ...
 ## def create_experiment_dir()
-
+- This function create experiments folder.
+- Input: args
+- Output: None
+- This function will crete ./experiement and save training/test result.  
 
 # misc.py
+This python file contain some helper functions.
 ## def seprate_point_cloud()
 - This function using to generate the incomplete point cloud with a setted number.  
 - Input: xyz, num_points, crop, fixed_points = None, padding_zeros = False
