@@ -71,24 +71,42 @@
 - Input: args, config, train_writer=None, val_writer=None
 - Output: checkpoint, model
 - It call dataset_builder() and model_builder() in builder.py.
+- Set model to train mode  
 - Check args, decide if resume a model, or distributed running
 - Start training, call PoinTr.py
-- For each epoch, compare metrics and save it as best_metrics, save it as a checkpoint.
-- Upadte lose function, and update F-score, CDL1, CDL2
+- For each epoch, caculate overall F-score and CDL1, CDL2 based on different category(Airplane, chair, car ...).
+- Compare metrics and save it as best_metrics, save it as a checkpoint.
+- Update lose function, and update F-score, CDL1, CDL2
+- See output in ./experiments/PoinTr/PCN_models/example if use PCN dataset  
+- See output in ./experiments/PoinTr/KITTI_models/example if use KITTI dataset
 
 ## def validate()
-- temp 1
-- temp 2
-- temp 3
+- This function validate the current model  
+- Input: base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val_writer, args, config, logger = None  
+- Output: Metrics(config.consider_metric, test_metrics.avg())
+- It validate the model based on the dataset_name, set model to evaluation mode  
+- Print testing results.  
+- Add testing results to TensorBoard.  
 
 ## def test_net()
 - This function manage test process
+- Input: args, config
+- Output: None
+- Load check point to load model  
+- Call test() function
+
+
 
 ## def test()
-- temp 1
-- temp 2
-- temp 3
-
+- This function test model
+- Input: base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, logger = None  
+- Output: visual_result folder, 
+- Set model to eval mode.  
+- It test the model based on the dataset_name.  
+- Save visual result (images) into ./experiemnts
+- Print testing results
+- See output in ./experiments/PoinTr/PCN_models/test_example/*.log  
+- See visual result in ./experiments/PoinTr/PCN_models/test_example/vis_result  
 
 
 # builder.py
