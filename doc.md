@@ -46,6 +46,12 @@
         <li><a href="#class-dgcnn_grouper">class DGCNN_Grouper()</a></li>
       </ul>
     </li>
+    <li><a href="#dataset">dataset</a>
+    <ul>
+        <li><a href="#kittidatasetpy">KITTIDataset.py</a></li>
+        <li><a href="#pcndatasetpy">PCNDataset.py</a></li>
+      </ul>
+    </li>
     <li><a href="#parserpy">parser.py</a></li>
     <li><a href="#miscpy">misc.py</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -183,9 +189,11 @@ This python file build dataset and model.
 # pointr.py
 This python file contain Pointr model.  
 ## def fps()
-- temp 1
-- temp 2
-- temp 3
+- This function is downsmaple. 
+- Input: pc (point cloud), num (number)
+- Output: sub_pc
+- Downsample point cloud  
+
 ## class Fold()
 - temp 1
 - temp 2
@@ -198,19 +206,38 @@ This python file contain Pointr model.
 # dgcnn_group.py
 - temp 1
 
-## def hnn_point()
-- temp 1
-- temp 2
-- temp 3
+## def knn_point()
+- Input:  
+    nsample: max sample number in local region  
+    xyz: all points, [B, N, C]  
+    new_xyz: query points, [B, S, C]  
+- Return:  
+    group_idx: grouped points index, [B, S, nsample]  
+- Cacvulate square distance between new_xyz and xyz.
 ## def square_distance()
-- temp 1
-- temp 2
-- temp 3
+- Calculate Euclid distance between each two points.  
+- src^T * dst = xn * xm + yn * ym + zn * zm  
+- sum(src^2, dim=-1) = xn*xn + yn*yn + zn*zn;  
+- sum(dst^2, dim=-1) = xm*xm + ym*ym + zm*zm;  
+- dist = (xn - xm)^2 + (yn - ym)^2 + (zn - zm)^2  
+        = sum(src**2,dim=-1)+sum(dst**2,dim=-1)-2*src^T*dst  
+- Input:  
+    src: source points, [B, N, C]  
+    dst: target points, [B, M, C]  
+- Output:  
+    dist: per-point square distance, [B, N, M]  
 ## class DGCNN_Grouper()
-- temp 1
-- temp 2
-- temp 3
+- This calss extract the local features around the center point.  
+- Input is point cloud
+- Output: local point cloud and feature
+- It first get graph feature and then downsample.  
+- It repeat above process to get final coordinate and feature.
 
+# dataset  
+
+## KITTIDataset.py
+
+## PCNDataset.py
 
 # parser.py
 - temp 1
