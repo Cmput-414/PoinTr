@@ -354,7 +354,13 @@ def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, 
                 if taxonomy_id not in category_metrics:
                     category_metrics[taxonomy_id] = AverageMeter(Metrics.names())
                 category_metrics[taxonomy_id].update(_metrics)
-
+                target_path = os.path.join(args.experiment_path, 'vis_result')
+                if not os.path.exists(target_path):
+                    os.mkdir(target_path)
+                misc.visualize_KITTI(
+                    os.path.join(target_path, f'{model_id}_{idx:03d}'),
+                    [partial[0].cpu(), dense_points[0].cpu()]
+                )
             elif dataset_name == 'ShapeNet':
                 gt = data.cuda()
                 choice = [torch.Tensor([1,1,1]),torch.Tensor([1,1,-1]),torch.Tensor([1,-1,1]),torch.Tensor([-1,1,1]),
