@@ -78,8 +78,6 @@ class PCN(data.Dataset):
                 
             print_log('Collecting files of Taxonomy [ID=%s, Name=%s]' % (dc['taxonomy_id'], dc['taxonomy_name']), logger='PCNDATASET')
             samples = dc[subset]
-            for s in samples:
-                file_list.append({
             #print(subset)
 
             for num in range(len(samples)//10):
