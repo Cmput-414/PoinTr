@@ -11,7 +11,7 @@ import json
 from .build import DATASETS
 from utils.logger import *
 
-
+#
 # References:
 # - https://github.com/hzxie/GRNet/blob/master/utils/data_loaders.py
 
@@ -30,8 +30,12 @@ class PCN(data.Dataset):
         self.dataset_categories = []
         with open(self.category_file) as f:
             self.dataset_categories = json.loads(f.read())
+            self.clst = len(self.dataset_categories)
             if config.CARS:
                 self.dataset_categories = [dc for dc in self.dataset_categories if dc['taxonomy_id'] == '02958343']
+        self.cls = np.zeros(self.clst)
+        
+
 
         self.n_renderings = 8 if self.subset == 'train' else 1
         self.file_list = self._get_file_list(self.subset, self.n_renderings)
@@ -64,30 +68,49 @@ class PCN(data.Dataset):
                 'objects': ['partial', 'gt']
             }])
 
+
+
     def _get_file_list(self, subset, n_renderings=1):
         """Prepare file list for the dataset"""
         file_list = []
 
         for dc in self.dataset_categories:
+                
             print_log('Collecting files of Taxonomy [ID=%s, Name=%s]' % (dc['taxonomy_id'], dc['taxonomy_name']), logger='PCNDATASET')
             samples = dc[subset]
+            #print(subset)
 
             for s in samples:
-                file_list.append({
+              i = 0
+              find = False
+              while find == False:
+                if dc == self.dataset_categories[i]:
+                    classV = i
+                    find = True
+                else:
+                    i = i+1
+
+              file_list.append({
                     'taxonomy_id':
                     dc['taxonomy_id'],
                     'model_id':
                     s,
+                    'taxonomy_name':
+                    dc['taxonomy_name'],
+                    'one_hot_vector':
+                    classV,
                     'partial_path': [
                         self.partial_points_path % (subset, dc['taxonomy_id'], s, i)
                         for i in range(n_renderings)
                     ],
                     'gt_path':
                     self.complete_points_path % (subset, dc['taxonomy_id'], s),
-                })
+              })
 
         print_log('Complete collecting files of the dataset. Total files: %d' % len(file_list), logger='PCNDATASET')
         return file_list
+
+
 
     def __getitem__(self, idx):
         sample = self.file_list[idx]
@@ -104,8 +127,10 @@ class PCN(data.Dataset):
 
         if self.transforms is not None:
             data = self.transforms(data)
-
-        return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'])
+        if self.cars:
+          return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], 2 ,sample['taxonomy_name'])
+        else:
+          return sample['taxonomy_id'], sample['model_id'], (data['partial'], data['gt'], sample['one_hot_vector'] ,sample['taxonomy_name'])
 
     def __len__(self):
         return len(self.file_list)
