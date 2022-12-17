@@ -80,7 +80,8 @@ class PCN(data.Dataset):
             samples = dc[subset]
             #print(subset)
 
-            for s in samples:
+            for num in range (len(samples)):
+              s = samples[num]
               i = 0
               find = False
               while find == False:
