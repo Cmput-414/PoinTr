@@ -32,7 +32,7 @@
 </details>
 
 
-# About The [Project](https://github.com/Cmput-414/PoinTr)  
+# About The [Project](https://github.com/Cmput-414/PoinTr/blob/master/documentation.md)  
 [Click Here to see ***Project Documentation***](https://github.com/Cmput-414/PoinTr/blob/master/documentation.md)  
 [Click Here to see Original Author's README.md](https://github.com/Cmput-414/PoinTr/blob/master/README_old.md)  
 **This project is 3D Point Cloud Inpainting.  
