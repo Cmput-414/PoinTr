@@ -58,6 +58,8 @@ class RandomSamplePoints(object):
 
     def __call__(self, ptcloud):
         choice = np.random.permutation(ptcloud.shape[0])
+        print("____________________________", choice)
+        breakpoint()
         ptcloud = ptcloud[choice[:self.n_points]]
 
         if ptcloud.shape[0] < self.n_points:
