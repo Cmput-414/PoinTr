@@ -9,8 +9,12 @@
   - PCNDataset.py
     - Load category list based on datset.  
 - We add New README to start our code.  
+  - Contain a flowchat that is code process.
 - We add documentation.md to explain the code.  
+  - Explain each python file and function.  
 - We will not use the DATASET.md, we will use new_data.md to set datset.  
+  - Since the time limit, we will not going to use ShapNet55/34.
+  - we mainly use KITTI and PCN dataset. 
 
 
 <details>
