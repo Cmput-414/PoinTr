@@ -99,7 +99,7 @@ There are two ways to set environments. We **recommend** to use Colab.
 ### Step 2: Set dataset  
 There are 2 ways to set dataset, we **recommend** to use frist method:  
 - **First method**:  
- We aleady shared a google drive folder[Pointr] to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
+ We aleady shared a google drive folder [`Pointr`] to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
  After you access the shared folder, you can run below code to set dataset.  
   1. First connect to your google drive to access shared drive
         ```
@@ -117,11 +117,7 @@ There are 2 ways to set dataset, we **recommend** to use frist method:
             ```
       2. Set ShapeNetCompletion (PCN) dataset  
             ```
-            unzip /content/drive/Shareddrives/Pointr/ShapeNetCompletion.zip -d /content/pointr/data
-            cp -r '/content/pointr/data/PCN/PCN.json' /content/pointr/data/ShapeNetCompletion
-            cp -r '/content/pointr/data/PCN/category.txt' /content/pointr/data/ShapeNetCompletion
-            rm -rf /content/pointr/data/PCN
-            mv /content/pointr/data/ShapeNetCompletion /content/pointr/data/PCN
+            unzip /content/drive/Shareddrives/Pointr/PCN.zip -d /content/pointr/data
             ```
 - **Second method**:  
 You will need to dowload them or add them to your google drive.  
@@ -158,10 +154,17 @@ The we will use best check point to do test with some visual result (images).
     ```
 
 ## Evaluation   
+### Do test from Pretrain model
+Instead start trsing to do test, we also have some pretrain model.
+| Dataset Name | Download LInk |  
+| --- | --- |  
+| KITTI | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)]|  
+| PCN | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)] |  
 
+### Do test from new training
 we will use result from training to do evaluation.  
-The training result wil save into ./experiments/PoinTr  
-We will use the best check point (ckpts) to do evaluation.  
+The training result will save into ./experiments/PoinTr  
+We will use the best check point (ckpt_best.pth) to do evaluation.  
 After test, we will be able to see some visual result (images) in folder ./vis_result.
 
 0. Basic format for test
