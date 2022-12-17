@@ -66,7 +66,7 @@ There are two ways to set environments. We **recommend** to use Colab.
 
 ## Installation  
 
-### Step 1: Set environments  (14 minutes)
+### Step 1: Set environments  (~14 minutes)
 
 1. Git clone the code
     ```
