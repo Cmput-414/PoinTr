@@ -13,6 +13,12 @@ def fps(pc, num):
     return sub_pc
 
 class LBCNN(nn.Module):
+    """
+    This class is used to create label vector for each partial model.
+    fd[1] and fd[2] are result from folding net.
+    Input: partial point cloud (total_batch size, number of query, fd[1]xfd[2] )
+    Output: Array of label
+    """
     def __init__(self, in_channel, hidden_dim = 512):
         super().__init__()
 
