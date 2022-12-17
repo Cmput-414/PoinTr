@@ -37,6 +37,7 @@
     <li>
       <a href="#pointrpy">Pointr.py</a></li>
       <ul>
+      <li><a href="#class-lbcnn">class LBCNN()</a></li>
         <li><a href="#class-fold">class Fold()</a></li>
         <li><a href="#class-pointr">class PoinTr()</a></li>
       </ul>
@@ -209,15 +210,24 @@ This python file contain Pointr model.
 - Input: pc (point cloud), num (number)
 - Output: sub_pc
 - Downsample point cloud  
+## class LBCNN()
+- This class is used to create label vector for each partial model.  
+- fd[1] and fd[2] are result from folding net.  
+- Input: partial point cloud (total_batch size, number of query, fd[1]xfd[2] )
+- Output: Array of label  
 
 ## class Fold()
-- temp 1
-- temp 2
-- temp 3
+- This class rebuild a cluster point
+- Input:  rebuild feature from Transfermor
+- Output: extracted feature (batch size x number of query, feature1, feature2)
+
 ## class PoinTr()
-- temp 1
-- temp 2
-- temp 3
+- This is poinTr model.
+- Input: partial point cloud  
+- Output: (coarse_point_cloud, rebuild_points,label)
+- This class first use transfermor to return a query and coarse_point_cloud.  
+- Then use foldingnet to extrac the feature.  
+- Then reshape the output from foldingnet, and input the result in to LBCNN.   
 
 # dgcnn_group.py
 - This python file contain DGCNN.
