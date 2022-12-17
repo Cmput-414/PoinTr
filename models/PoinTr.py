@@ -153,27 +153,19 @@ class PoinTr(nn.Module):
             coarse_point_cloud], dim=-1)  # B M 1027 + C
 
         rebuild_feature = self.reduce_map(rebuild_feature.reshape(B*M, -1)) # BM C
-        # # NOTE: try to rebuild pc
-        # coarse_point_cloud = self.refine_coarse(rebuild_feature).reshape(B, M, 3)
 
         # NOTE: foldingNet
         relative_xyz = self.foldingnet(rebuild_feature)
         label = relative_xyz.reshape(B, M, relative_xyz.size(1)*relative_xyz.size(2))
         label = self.CNN(label)
         relative_xyz = relative_xyz.reshape(B, M, 3, -1)    # B M 3 S
-        #print(">>>>>>>>")
-        #print(label)
-        rebuild_points = (relative_xyz + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)  # B N 3
 
-        # NOTE: fc
-        # relative_xyz = self.refine(rebuild_feature)  # BM 3S
-        # rebuild_points = (relative_xyz.reshape(B,M,3,-1) + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)
+        rebuild_points = (relative_xyz + coarse_point_cloud.unsqueeze(-1)).transpose(2,3).reshape(B, -1, 3)  # B N 3
 
         # cat the input
         inp_sparse = fps(xyz, self.num_query)
         coarse_point_cloud = torch.cat([coarse_point_cloud, inp_sparse], dim=1).contiguous()
         rebuild_points = torch.cat([rebuild_points, xyz],dim=1).contiguous()
-        #print(coarse_point_cloud.size())
-        #print(rebuild_points.size())
+
         ret = (coarse_point_cloud, rebuild_points,label)
         return ret
