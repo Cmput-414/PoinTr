@@ -1,4 +1,5 @@
 # This is documentation about project code.
+# This file explain each python file and function we used in the project.
 <details>
   <summary>Menu of documentation</summary>
   <ol>
