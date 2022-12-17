@@ -96,7 +96,7 @@ There are two ways to set environments. We **recommend** to use Colab.
     source activate myenv && cd /content/pointr/extensions/gridding && python setup.py install --user 
     source activate myenv && cd /content/pointr/extensions/gridding_loss && python setup.py install --user
     ```
-### Step 2: Set dataset  
+### Step 2: Set dataset   (~7 minutes)
 There are 2 ways to set dataset, we **recommend** to use frist method:  
 - **First method**:  
  We aleady shared a google drive folder [`Pointr`] to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
