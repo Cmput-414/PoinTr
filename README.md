@@ -156,7 +156,7 @@ The we will use best check point to do test with some visual result (images).
 ## Evaluation   
 ### Do test from Pretrain model
 Instead start trsing to do test, we also have some pretrain model.
-| Dataset Name | Download LInk |  
+| Pretrained model | Download LInk |  
 | --- | --- |  
 | KITTI | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)]|  
 | PCN | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)] |  
