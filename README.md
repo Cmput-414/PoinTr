@@ -159,7 +159,7 @@ Instead start trsing to do test, we also have some pretrain model.
 | Pretrained model | Download LInk |  
 | --- | --- |  
 | KITTI | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)]|  
-| PCN | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)] |  
+| PCN | [[Google Drive](https://drive.google.com/file/d/1-L2bqK2dRMjSkDR8K6LEe_ad6JFT3kwj/view?usp=share_link)] |  
 
 ### Do test from new training
 we will use result from training to do evaluation.  
