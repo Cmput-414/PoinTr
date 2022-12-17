@@ -82,9 +82,8 @@ def run_net(args, config, train_writer=None, val_writer=None):
                 partial = data[0].cuda()
                 gt = data[1].cuda()
                 cls = data[2].cuda()
-                name = data[3]
-                #print(cls)
-                #print(name)
+
+
                 if config.dataset.train._base_.CARS:
                     if idx == 0:
                         print_log('padding while KITTI training', logger=logger)
@@ -103,9 +102,6 @@ def run_net(args, config, train_writer=None, val_writer=None):
             
             sparse_loss, dense_loss, Cls_loss = base_model.module.get_loss(ret, gt, cls)
 
-            #print("sparse_loss:", sparse_loss)
-            #print("dense_loss:", dense_loss)
-            #print("Cls_loss:", Cls_loss)
             _loss = sparse_loss + dense_loss + Cls_loss*0.05
             _loss.backward()
 
@@ -213,12 +209,7 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
 
             test_losses.update([sparse_loss_l1.item() * 1000, sparse_loss_l2.item() * 1000, dense_loss_l1.item() * 1000, dense_loss_l2.item() * 1000])
 
-            # dense_points_all = dist_utils.gather_tensor(dense_points, args)
-            # gt_all = dist_utils.gather_tensor(gt, args)
-
-            # _metrics = Metrics.get(dense_points_all, gt_all)
             _metrics = Metrics.get(dense_points, gt)
-            # _metrics = [dist_utils.reduce_tensor(item, args) for item in _metrics]
 
             if taxonomy_id not in category_metrics:
                 category_metrics[taxonomy_id] = AverageMeter(Metrics.names())
