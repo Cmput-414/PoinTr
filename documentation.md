@@ -1,6 +1,6 @@
 # This is documentation about project code.
 <details>
-  <summary>Menu of ReadMe</summary>
+  <summary>Menu of documentation</summary>
   <ol>
     <li>
       <a href="#mainpy">main.py</a>
