@@ -12,7 +12,7 @@ def fps(pc, num):
     sub_pc = pointnet2_utils.gather_operation(pc.transpose(1, 2).contiguous(), fps_idx).transpose(1,2).contiguous()
     return sub_pc
 
-class CNNet(nn.Module):
+class LBCNN(nn.Module):
     def __init__(self, in_channel, hidden_dim = 512):
         super().__init__()
 
@@ -112,7 +112,7 @@ class PoinTr(nn.Module):
         self.base_model = PCTransformer(in_chans = 3, embed_dim = self.trans_dim, depth = [6, 8], drop_rate = 0., num_query = self.num_query, knn_layer = self.knn_layer)
         
         self.foldingnet = Fold(self.trans_dim, step = self.fold_step, hidden_dim = 256)  # rebuild a cluster point
-        self.CNN = CNNet(self.trans_dim, hidden_dim = 256)
+        self.CNN = LBCNN(self.trans_dim, hidden_dim = 256)
 
         self.increase_dim = nn.Sequential(
             nn.Conv1d(self.trans_dim, 1024, 1),
