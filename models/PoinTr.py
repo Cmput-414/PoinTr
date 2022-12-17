@@ -98,11 +98,6 @@ class Fold(nn.Module):
         x = torch.cat([fd1, features], dim=1)
         fd2 = self.folding2(x) #3584, 3, 64
 
-
-        
-        #print(label1.size())
-        #print(fd2.size())
-        #print(fd2.size()) 
         return fd2
 
 @MODELS.register_module()
