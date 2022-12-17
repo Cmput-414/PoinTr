@@ -197,7 +197,9 @@ What we do:
 4. Write a documentation for code.
 5. Set a environment in colab
 
-
+- A visual result on KITTI datset.  
+  - 10 epoch, 16 batch size
+  [![https://drive.google.com/file/d/1-I4xQdq0E747-h8XOQjhbCR5DCFpWmeZ/view?usp=share_link]](https://drive.google.com/file/d/1-I4xQdq0E747-h8XOQjhbCR5DCFpWmeZ/view?usp=share_link）
 
 
 
