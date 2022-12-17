@@ -81,6 +81,10 @@ def run_net(args, config, train_writer=None, val_writer=None):
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
+                #print(cls)
+                #print(name)
                 if config.dataset.train._base_.CARS:
                     if idx == 0:
                         print_log('padding while KITTI training', logger=logger)
@@ -97,9 +101,12 @@ def run_net(args, config, train_writer=None, val_writer=None):
            
             ret = base_model(partial)
             
-            sparse_loss, dense_loss = base_model.module.get_loss(ret, gt)
-         
-            _loss = sparse_loss + dense_loss 
+            sparse_loss, dense_loss, Cls_loss = base_model.module.get_loss(ret, gt, cls)
+
+            #print("sparse_loss:", sparse_loss)
+            #print("dense_loss:", dense_loss)
+            #print("Cls_loss:", Cls_loss)
+            _loss = sparse_loss + dense_loss + Cls_loss*0.05
             _loss.backward()
 
             # forward
@@ -177,6 +184,9 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
+
             elif dataset_name == 'ShapeNet':
                 gt = data.cuda()
                 partial, _ = misc.seprate_point_cloud(gt, npoints, [int(npoints * 1/4) , int(npoints * 3/4)], fixed_points = None)
@@ -192,6 +202,8 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
             sparse_loss_l2 =  ChamferDisL2(coarse_points, gt)
             dense_loss_l1 =  ChamferDisL1(dense_points, gt)
             dense_loss_l2 =  ChamferDisL2(dense_points, gt)
+            Cls_l = nn.CrossEntropyLoss()
+            Cls_loss = Cls_l(ret[2], cls)
 
             if args.distributed:
                 sparse_loss_l1 = dist_utils.reduce_tensor(sparse_loss_l1, args)
@@ -322,6 +334,8 @@ def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, 
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
 
                 ret = base_model(partial)
                 coarse_points = ret[0]
@@ -340,7 +354,13 @@ def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, 
                 if taxonomy_id not in category_metrics:
                     category_metrics[taxonomy_id] = AverageMeter(Metrics.names())
                 category_metrics[taxonomy_id].update(_metrics)
-
+                target_path = os.path.join(args.experiment_path, 'vis_result')
+                if not os.path.exists(target_path):
+                    os.mkdir(target_path)
+                misc.visualize_KITTI(
+                    os.path.join(target_path, f'{model_id}_{idx:03d}'),
+                    [partial[0].cpu(), dense_points[0].cpu()]
+                )
             elif dataset_name == 'ShapeNet':
                 gt = data.cuda()
                 choice = [torch.Tensor([1,1,1]),torch.Tensor([1,1,-1]),torch.Tensor([1,-1,1]),torch.Tensor([-1,1,1]),
