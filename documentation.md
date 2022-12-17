@@ -1,6 +1,15 @@
 # This is documentation about project code.
+- In this project, we change the PoinTr model by adding a CNN. 
+- There is a [***Link***](https://github.com/Cmput-414/PoinTr/pull/3/files) you can see what do we change. 
+- We modify these four python file:  
+  - PoinTr.py  
+    - We add class LBCNN(Use CNN to create label)
+  - runner.py
+    - Add lose into total lose, get visual result for PCN dataset.  
+  - PCNDataset.py
+    - Load category list based on datset.  
 <details>
-  <summary>Menu of documentation</summary>
+  <summary size='100px'>Menu of documentation</summary>
   <ol>
     <li>
       <a href="#mainpy">main.py</a>
