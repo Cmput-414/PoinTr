@@ -49,7 +49,7 @@ We also change the DG-CNN to improve the F-score and CDL.**
 
 # Getting Started
 There are two ways to set environments. We **recommend** to use Colab.  
-- First is using [**colab**](https://github.com/Cmput-414/PoinTr/blob/master/Project%20Implementation2.ipynb).  
+- First is using [**colab**](https://github.com/Cmput-414/PoinTr/blob/master/Project%20Implementation.ipynb).  
 - Second is follow the below instructions.  
 
 ## Prerequisites 
