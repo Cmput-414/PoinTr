@@ -73,4 +73,3 @@ class KITTI(data.Dataset):
             data = self.transforms(data)
 
         return  sample['taxonomy_id'], sample['model_id'], data['partial_cloud']
-        
