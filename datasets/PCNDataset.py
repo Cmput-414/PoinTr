@@ -34,9 +34,6 @@ class PCN(data.Dataset):
             if config.CARS:
                 self.dataset_categories = [dc for dc in self.dataset_categories if dc['taxonomy_id'] == '02958343']
         self.cls = np.zeros(self.clst)
-        
-
-
         self.n_renderings = 8 if self.subset == 'train' else 1
         self.file_list = self._get_file_list(self.subset, self.n_renderings)
         self.transforms = self._get_transforms(self.subset)
@@ -68,18 +65,14 @@ class PCN(data.Dataset):
                 'objects': ['partial', 'gt']
             }])
 
-
-
     def _get_file_list(self, subset, n_renderings=1):
         """Prepare file list for the dataset"""
         file_list = []
 
-        for dc in self.dataset_categories:
-                
+        for dc in self.dataset_categories:                
             print_log('Collecting files of Taxonomy [ID=%s, Name=%s]' % (dc['taxonomy_id'], dc['taxonomy_name']), logger='PCNDATASET')
             samples = dc[subset]
-            #print(subset)
-
+            
             for s in samples:
               i = 0
               find = False
@@ -109,8 +102,6 @@ class PCN(data.Dataset):
 
         print_log('Complete collecting files of the dataset. Total files: %d' % len(file_list), logger='PCNDATASET')
         return file_list
-
-
 
     def __getitem__(self, idx):
         sample = self.file_list[idx]
