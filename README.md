@@ -117,7 +117,7 @@ There are 2 ways to set dataset, we **recommend** to use frist method:
             ```
       2. Set ShapeNetCompletion (PCN) dataset  
             ```
-            unzip /content/drive/Shareddrives/Pointr/PCN.zip -d /content/pointr/data
+            unzip /content/drive/Shareddrives/Pointr/PCN.zip -d /
             ```
 - **Second method**:  
 You will need to dowload them or add them to your google drive.  
