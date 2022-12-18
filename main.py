@@ -9,6 +9,17 @@ import torch
 from tensorboardX import SummaryWriter
 
 def main():
+    '''
+    Main function
+    Accept user's input and process the user's command.
+    It will accept yaml format as input, yaml file contain information about model type, batch size, and epoch ...
+    Call get_args(), return args
+    Call get_config(), return config (yaml format)
+    Based on argument, check input is contain information about train, test, and resume ...
+    If contain test, it will call test_net(args, config)
+    If contain train, it will call run_net(args, config, train_writer, val_writer) )
+    If contain resume, it will call resume_model() to resume a model.
+    '''
     # args
     args = parser.get_args()
     # CUDA

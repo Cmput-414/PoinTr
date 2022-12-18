@@ -8,6 +8,12 @@ from .build import MODELS
 
 
 def fps(pc, num):
+    '''
+    This function is downsmaple.
+    Input: pc (point cloud), num (number)
+    Output: sub_pc
+    Downsample point cloud
+    '''
     fps_idx = pointnet2_utils.furthest_point_sample(pc, num) 
     sub_pc = pointnet2_utils.gather_operation(pc.transpose(1, 2).contiguous(), fps_idx).transpose(1,2).contiguous()
     return sub_pc
@@ -55,6 +61,11 @@ class LBCNN(nn.Module):
         return label1
 
 class Fold(nn.Module):
+    '''
+    This class rebuild a cluster point
+    Input: rebuild feature from Transfermor
+    Output: extracted feature (batch size x number of query, feature1, feature2)
+    '''
     def __init__(self, in_channel , step , hidden_dim = 512):
         super().__init__()
 
@@ -102,6 +113,14 @@ class Fold(nn.Module):
 
 @MODELS.register_module()
 class PoinTr(nn.Module):
+    '''
+    This is poinTr model.
+    Input: partial point cloud
+    Output: (coarse_point_cloud, rebuild_points,label)
+    This class first use transfermor to return a query and coarse_point_cloud.
+    Then use foldingnet to extrac the feature.
+    Then reshape the output from foldingnet, and input the result in to LBCNN.
+    '''
     def __init__(self, config, **kwargs):
         super().__init__()
         self.trans_dim = config.trans_dim
