@@ -166,8 +166,8 @@ Instead start trsing to do test, we also have some pretrain model.
 Download pretrained model into ./pretrained folder  
 ```
 mkdir pretrained
-unzip /content/drive/Shareddrives/Pointr/pretrain/kitti-ckpt_best.pth -d /content/pointr/pretrained  
-unzip /content/drive/Shareddrives/Pointr/pretrain/pcn-ckpt_best.pth -d /content/pointr/pretrained  
+cp -r /content/drive/Shareddrives/Pointr/pretrain/kitti-ckpt-best.pth -d /content/pointr/pretrained
+cp -r /content/drive/Shareddrives/Pointr/pretrain/pcn-ckpt_best.pth -d /content/pointr/pretrained  
 ```  
 ***For example: load pretrained model for KITTI***  
 /content/pointr/pretrained/kitti-ckpt-best.pth  
