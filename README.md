@@ -216,9 +216,7 @@ What we do:
 - A visual result on KITTI datset.  
   - 10 epoch, 16 batch size
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/NMUYv3yEMac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
+[![Watch the video](https://github.com/Cmput-414/PoinTr/blob/master/fig/image.png)](https://www.youtube.com/watch?v=NMUYv3yEMac) 
 
 # License
 
