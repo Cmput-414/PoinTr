@@ -161,6 +161,20 @@ Instead start trsing to do test, we also have some pretrain model.
 | KITTI | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)]|  
 | PCN | [[Google Drive](https://drive.google.com/file/d/1-L2bqK2dRMjSkDR8K6LEe_ad6JFT3kwj/view?usp=share_link)] |  
 
+Download pretrained model into ./pretrained folder  
+```
+mkdir pretrained
+unzip /content/drive/Shareddrives/Pointr/pretrain/kitti-ckpt_best.pth -d /content/pointr/pretrained  
+unzip /content/drive/Shareddrives/Pointr/pretrain/pcn-ckpt_best.pth -d /content/pointr/pretrained  
+```  
+***For example: load pretrained model for KITTI***  
+/content/pointr/pretrained/kitti-ckpt-best.pth  
+***For example: load pretrained model for PCN***  
+/content/pointr/pretrained/pcn-ckpt-best.pth  
+```
+source activate myenv && which python && bash ./scripts/test.sh 0 --ckpts ./pretrained/kitti-ckpt-best.pth --config ./cfgs/KITTI_models/PoinTr.yaml --exp_name example
+```  
+
 ### Do test from new training
 we will use result from training to do evaluation.  
 The training result will save into ./experiments/PoinTr  
