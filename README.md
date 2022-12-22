@@ -217,7 +217,10 @@ What we do:
   - 10 epoch, 16 batch size
 
 [![Watch the video](https://github.com/Cmput-414/PoinTr/blob/master/fig/image.png)](https://www.youtube.com/watch?v=NMUYv3yEMac) 
-
+  - 100 epoch, 16 batch size
+  
+  [![](https://github.com/Cmput-414/PoinTr/blob/0f1377c50aea9f78236b01c27b2fe64cecd6713a/fig/100-16.png)](https://github.com/Cmput-414/PoinTr/blob/0f1377c50aea9f78236b01c27b2fe64cecd6713a/fig/100-16.png)
+  
 # License
 
 Distributed under the MIT License. 
