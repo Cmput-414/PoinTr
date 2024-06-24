@@ -11,6 +11,20 @@ from utils.metrics import Metrics
 from extensions.chamfer_dist import ChamferDistanceL1, ChamferDistanceL2
 
 def run_net(args, config, train_writer=None, val_writer=None):
+    '''
+    This function manage training process
+    Input: args, config, train_writer=None, val_writer=None
+    Output: checkpoint, model
+    It call dataset_builder() and model_builder() in builder.py.
+    Set model to train mode
+    Check args, decide if resume a model, or distributed running
+    Start training, call PoinTr.py
+    For each epoch, caculate overall F-score and CDL1, CDL2 based on different category(Airplane, chair, car ...).
+    Compare metrics and save it as best_metrics, save it as a checkpoint.
+    Update lose function, and update F-score, CDL1, CDL2
+    See output in ./experiments/PoinTr/PCN_models/example if use PCN dataset
+    See output in ./experiments/PoinTr/KITTI_models/example if use KITTI dataset
+    '''
     logger = get_logger(args.log_name)
     # build dataset
     (train_sampler, train_dataloader), (_, test_dataloader) = builder.dataset_builder(args, config.dataset.train), \
@@ -81,6 +95,9 @@ def run_net(args, config, train_writer=None, val_writer=None):
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+
+
                 if config.dataset.train._base_.CARS:
                     if idx == 0:
                         print_log('padding while KITTI training', logger=logger)
@@ -97,9 +114,9 @@ def run_net(args, config, train_writer=None, val_writer=None):
            
             ret = base_model(partial)
             
-            sparse_loss, dense_loss = base_model.module.get_loss(ret, gt)
-         
-            _loss = sparse_loss + dense_loss 
+            sparse_loss, dense_loss, Cls_loss = base_model.module.get_loss(ret, gt, cls)
+
+            _loss = sparse_loss + dense_loss + Cls_loss*0.05
             _loss.backward()
 
             # forward
@@ -159,6 +176,14 @@ def run_net(args, config, train_writer=None, val_writer=None):
     val_writer.close()
 
 def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val_writer, args, config, logger = None):
+    '''
+    This function validate the current model
+    Input: base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val_writer, args, config, logger = None
+    Output: Metrics(config.consider_metric, test_metrics.avg())
+    It validate the model based on the dataset_name, set model to evaluation mode
+    Print testing results.
+    Add testing results to TensorBoard.
+    '''
     print_log(f"[VALIDATION] Start validating epoch {epoch}", logger = logger)
     base_model.eval()  # set model to eval mode
 
@@ -177,6 +202,9 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
+
             elif dataset_name == 'ShapeNet':
                 gt = data.cuda()
                 partial, _ = misc.seprate_point_cloud(gt, npoints, [int(npoints * 1/4) , int(npoints * 3/4)], fixed_points = None)
@@ -192,6 +220,8 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
             sparse_loss_l2 =  ChamferDisL2(coarse_points, gt)
             dense_loss_l1 =  ChamferDisL1(dense_points, gt)
             dense_loss_l2 =  ChamferDisL2(dense_points, gt)
+            Cls_l = nn.CrossEntropyLoss()
+            Cls_loss = Cls_l(ret[2], cls)
 
             if args.distributed:
                 sparse_loss_l1 = dist_utils.reduce_tensor(sparse_loss_l1, args)
@@ -201,12 +231,7 @@ def validate(base_model, test_dataloader, epoch, ChamferDisL1, ChamferDisL2, val
 
             test_losses.update([sparse_loss_l1.item() * 1000, sparse_loss_l2.item() * 1000, dense_loss_l1.item() * 1000, dense_loss_l2.item() * 1000])
 
-            # dense_points_all = dist_utils.gather_tensor(dense_points, args)
-            # gt_all = dist_utils.gather_tensor(gt, args)
-
-            # _metrics = Metrics.get(dense_points_all, gt_all)
             _metrics = Metrics.get(dense_points, gt)
-            # _metrics = [dist_utils.reduce_tensor(item, args) for item in _metrics]
 
             if taxonomy_id not in category_metrics:
                 category_metrics[taxonomy_id] = AverageMeter(Metrics.names())
@@ -283,6 +308,13 @@ crop_ratio = {
 }
 
 def test_net(args, config):
+    '''
+    This function manage test process
+    Input: args, config
+    Output: None
+    Load check point to load model
+    Call test() function
+    '''
     logger = get_logger(args.log_name)
     print_log('Tester start ... ', logger = logger)
     _, test_dataloader = builder.dataset_builder(args, config.dataset.test)
@@ -304,7 +336,17 @@ def test_net(args, config):
     test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, logger=logger)
 
 def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, logger = None):
-
+    '''
+    This function test model
+    Input: base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, logger = None
+    Output: visual_result folder,
+    Set model to eval mode.
+    It test the model based on the dataset_name.
+    Save visual result (images) into ./experiemnts
+    Print testing results
+    See output in ./experiments/PoinTr/PCN_models/test_example/*.log
+    See visual result in ./experiments/PoinTr/PCN_models/test_example/vis_result
+    '''
     base_model.eval()  # set model to eval mode
 
     test_losses = AverageMeter(['SparseLossL1', 'SparseLossL2', 'DenseLossL1', 'DenseLossL2'])
@@ -322,6 +364,8 @@ def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, 
             if dataset_name == 'PCN':
                 partial = data[0].cuda()
                 gt = data[1].cuda()
+                cls = data[2].cuda()
+                name = data[3]
 
                 ret = base_model(partial)
                 coarse_points = ret[0]
@@ -340,7 +384,13 @@ def test(base_model, test_dataloader, ChamferDisL1, ChamferDisL2, args, config, 
                 if taxonomy_id not in category_metrics:
                     category_metrics[taxonomy_id] = AverageMeter(Metrics.names())
                 category_metrics[taxonomy_id].update(_metrics)
-
+                target_path = os.path.join(args.experiment_path, 'vis_result')
+                if not os.path.exists(target_path):
+                    os.mkdir(target_path)
+                misc.visualize_KITTI(
+                    os.path.join(target_path, f'{model_id}_{idx:03d}'),
+                    [partial[0].cpu(), dense_points[0].cpu()]
+                )
             elif dataset_name == 'ShapeNet':
                 gt = data.cuda()
                 choice = [torch.Tensor([1,1,1]),torch.Tensor([1,1,-1]),torch.Tensor([1,-1,1]),torch.Tensor([-1,1,1]),

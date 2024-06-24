@@ -1,182 +1,249 @@
-# PoinTr: Diverse Point Cloud Completion with Geometry-Aware Transformers
+<details>
+  <summary>Menu of ReadMe</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <ul>
+        <li><a href="#step-1-set-environments">Step 1: Set environments</a></li>
+        <li><a href="#step-2-set-dataset">Step 2: Set dataset</a></li> 
+      </ul>
+      </ul>
+    </li>
+    <li>
+      <a href="#usage">Usage</a></li>
+      <ul>
+        <li><a href="#train">Train</a></li>
+        <li><a href="#evaluation">Evaluation</a></li>
+      </ul>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/pointr-diverse-point-cloud-completion-with/point-cloud-completion-on-shapenet)](https://paperswithcode.com/sota/point-cloud-completion-on-shapenet?p=pointr-diverse-point-cloud-completion-with)
 
-Created by [Xumin Yu](https://yuxumin.github.io/)\*, [Yongming Rao](https://raoyongming.github.io/)\*, [Ziyi Wang](https://github.com/LavenderLA), [Zuyan Liu](https://github.com/lzy-19), [Jiwen Lu](https://scholar.google.com/citations?user=TN8uDQoAAAAJ&hl=en&authuser=1), [Jie Zhou](https://scholar.google.com/citations?user=6a79aPwAAAAJ&hl=en&authuser=1)
+# About The [Project](https://github.com/Cmput-414/PoinTr/blob/master/documentation.md)  
+[Click Here to see ***Project Documentation***](https://github.com/Cmput-414/PoinTr/blob/master/documentation.md)  
+[Click Here to see Original Author's README.md](https://github.com/Cmput-414/PoinTr/blob/master/README_old.md)  
+**This project is 3D Point Cloud Inpainting.  
+In this project, we add label to modify the loss function.  
+We also change the DG-CNN to improve the F-score and CDL.**  
 
-[[arXiv]](https://arxiv.org/abs/2108.08839) [[Video]](https://youtu.be/mSGphas0p8g) [[Dataset]](./DATASET.md) [[Models]](#pretrained-models) [[supp]](https://yuxumin.github.io/files/PoinTr_supp.pdf)
+## Project Flowchart - Click image to see HD version and ZOOM IN/OUT  
+[![Project Flow chart](https://kroki.io/mermaid/svg/eNqNVlGP2kYQfs-vGPnJnAjpwV0fkFqpB40U9ZpYwXkJF6HFrI0VY7vrdZKr-PH9ZnYNdghVeAB2d2Z25ptvZiczqt5TvHxB-PyxXlll7KeXL38n-hgGB5WXk_r5qaQ3lpK9Tj5TnlJe1i2W1eGgyh3lDWVVXmZkK7IGClQZsrqxE1aDtGURORmT3euSElUUZNpyU2objoZi0OtL8dqLBSNx8SOxcw9hAAOlNuJdvIdq_Wz3VUlpXmj4Vlr25HQJsaeXxh7Y2DFm344UR_09yGJrJVsv5Ltpt5kDK6J1IEocdmSqRDdN8EmEFutgp9PzxRwcwzUnZbJmzJ6leTZ2eGy-mtxqM6YvqvD_IX9zcyMBpW2Z2BwhAWaVaafCN9buxjE9lUBNcNq2ebETNACAaSxtdVoZTQ2n86zZOekwdDl_XMlqGQYr9UWT8nmukVPbwbQUkWMQc2KyirYKEsj3INSTw2PaVWQAYOdpcKSHVexMrWKx5Zd-FblV5FaPDnVd7oa4s-46ePhRZD6wXW60wyx-cJFOw-A1AzI-01cywWTrWJKXsHhQrAf41bYCu-F-e9CIJG-sybet1bsx1coAbF1ACkg0mr7mwP6gPveSk6oGaSSP3GIqES1mYfBeLPbRpTD5XNtRJzoT4qEU2L-Jc-CIbeguOMcCtuxuDtVOF-EVTUFmw6YlyrKy9LYqxdRdz1RRqd33hry3U6C2ED-X5_BfRT76k_B0cG0PKVx1F35oGI6eAVoqq04YXhhhP39g6L4zdKl8SZAlrR9OlXCFEsvbMDiXi6QSKA37xg6XNdpuvJzvHwLWeQ-qQ_4LG1z5SVFeWkHJyKI7ckTyve4782dhOegYtbwFXsntL67PXFwBiy2IaSuT7CetzQvgCZkJw_eIjIOasMu5F12IG21bU1KjDnXBvYi3C5H0ReVunPobL0HwBrZwxPFpoDfzeg2ay0bIL9wXTWk4TFRSliav9Ldam_ygS9sMTNx5E33GQpvD8dgMWj07siMknNn0VIoYp0-jy7ZS5dzk-Fb8O78JZz0-Gzhw7x0YVh9c8DXtzfW9QGtOT43G6XXdF1C6dsqleMTydu0I6V_assl32geWVsU5EZCUYun0ps4r0XVObVJTHTZJmrED711eFLMaFdUmXIOeMNTUOsnTHDvb5xOLSnXQ_q6L2pLeu_qpprtChTnJoqpq-rOukn0wcm0fnWWF61103cTA9c07nuIr14ZWs64LdU5DPsMPGpHNVUFhXmIIAWuth2s0B35_vYnjN_iNFm87e6f-CENsBynB6ZFW6IedMUbOv8q9CrhuQK6BifvvTAhPQDfkYWequkZs4Fbuk5o3CbIcXOlfEWMcoTxiQ3_3KukC4QgIO7mOMzJifHv-N_TOMDvftVa2k0oZ1KbU3SYpqhZPmdGONrLZjAu1PTX26Na9yZwqq2u6ndMHtJRogZGnbPiplDFlsGZEJHy8nRyp1IbQ759Wm-fxD3zobnPJjmb-tukcmq7vuUdyIDxzwndeeDan16gQYPxWd8NKdOdk7r3M3ZzSuukO793hr_7wft61L_zQb-HPQjWiaznEOLUOiqo5z2_XkviIJDJbQOkNK_SHRXgzpsyGmYELqF27H2FKhH5lwkRZnVXmuZ9i1t8458dukeZl93dRdOE_utQ-8vuOylGYowauSp-UotVctKQyfg0nk8m1aGOOlmfla0HGPshznz0Hedrrj8aj_5uAoQBBDL3yxmHVmzp9h4mn7l5Hq3h28ttP8vz5Dzj0HNA)](https://mermaid.live/view#pako:eNqNV9tu2zgQ_RVCT06hupEvSWpgF9jYu0Cx2a5Qqy-NC4OWKFuoLGopqq1b99_3DEld7LhBkweb5Mxw5syZ4fi7F8tEeDNvq3i5Y9FiVTD8_fG41Fzpjy9f_s7Yh8HK2_OsGJaHFY7faBbvRPyJZSnLirLGUu73vEhYVrGtzIot05JpBQ0mFdOi0kOjB3FNMubIZ3onChbzPGeqLtaF0IOrMzlo9sVo3ch5V9bRD4xcvIeHMFIIZX2MdlAvD3onC5ZmuYCHhSZ_2psY-XvJ4D0ZPEbk4pFF4ckmxLG3tHurwn5W9cZhF7LHlWc0CYNQyVhU1cr7aOXmOExE2rlgYiX8ZoyrbeWTk2m29S0-6y8q00L57DPP3XdSePHihQkurYtYZwgPwPOtsDp0bWmv9RmkAaMBblNneWKwARqq0mwjUqkEqyjHnWrnqgXVceFhaZYLYLzknwXjLv0lUq073BZG6ggEKGFbyTYcQmDCSdCt4z5LJFNAtPF45R3Z_TJy1paRMdes3TJ0y9AuH1wqRJGc5YL0gff9pTjbMJNMCQtidO8CHyHIvwgiv-O4yQ7xsSFRVsDqnpMmpYRvJGoAodR7gaiySqtsU2uR-KzkCviLnMQASyXYlwz52PNPvYylvEJyWYvkfGSCm4_hyztjtQ84G8SfSn3VSY8NN1E05ObQunHENqnPKfsGf7O93qPW88FPlQ1Oa7Jv4i2kZm9lYaxN-tZyyZOntpzbI8JwbhxedFi8ChsoOvnRyeU94HDhZPC-InB6JtiCa95C-tQKuXvB0rSxdEH7AnEW7PG-LZefEmURIMiurGx-Adlpt0lwZSX02gm6rmOA6_ZI97REDEdsoZryfWoGVWUWzZHjl-uTZxd00uagI9oiAHJxcO0a05NryGoNzmqp4t2w1lkObCE0JCgfwAGwFraJDUaZ5JXQtSpYxfdlTt2L9nMj2padvXbUXHsBDmdkA3cszc50x41uhX60NsVhasNqmyZFJGZcs-Er8bUUKtuLQldnZiaNmRM-Q4Jic2CdvBnkUMJAA6IZBI0cpVSgSdemIVB3pKvxrXtdOkU6O_Ni2nhxVqOQcdXvTPZdoeaeto3Janb9G-DaZkwVe8QyeHRsbZ7wosoS4UJMZd5PD6RNRTW6I-ee0bferVMl9-s43RpH3tlscaI9Cq-OqVYdmVhVijhLM-xsDi3DCr4X7X1Pa9D27uWvNu0l1aKVzqUs2Z-ljHcguX1AqBst4YiNtRlMqCHQTlsLS9u9luO2eTURQGWLD_QvnfGcDbIC4w7IrR1-VzNC9O83UfSGvoTzt53Rtr3CGNlCrnB-ZEtqp41FAtO9-f1qecaGuQxWpudWDI1ASGQnUbIsESbYl7lsZ1VM-fd-2vxCA3yIUooU--ek8J7CHhLsVrZllRlmvh6-DZxXhsX_1trsx5IrFLSp1HWcyxoPpBKWVmaz8nO-6b0QYWAffZNCLUoWzNh79KNwjiGrqOgRtkPRyQYBZMDAq0xx20IyFP2vFurgX3Cku9LSIBw3V45mULbd0z6_Z_JjKz9p5Mcz9hfqCcC_Fd1wFE6s2LQRm8xYWlbd-dSe3zTn01nTBPHBfhv8KnZX7Jn0YpBDenNZdePjM_l9oPwSocD-NSmdTKxwy2dbPdgq-IKi17srjKowIdUg5lpspTqcZJ8srG0Yvl2kWdF8necdFg826w9mjEClcQxwJz6bjmsqXVClM76lt3Y4HD4TemRCpwH-mYijJuKuc_cibjf7w_rVszM5NCCJKdy8olj15t-mQUUjd7llXjTuhdD90Gj-Pd8DxfFjLMFPtu90vvLwA4na6YwZ53mdI8ZV8QOivNZyeShib4YMCd-rS_QQscg4QNk3myUvvNl376s3m1wPryfTyTQIxnfTSXA79b2DN3t5GwxvR-NxcBdMpq9fX49--N43KaE_Gl7fXt_djKbj4OYmeH13OzbWPphDMv7jf_lbrek)
+## Built With
+* [![Python][Python.com]][Python-url]
+* [![Pytorch][Pytorch.com]][Pytorch-url]
+* [![Cuda][Cuda.com]][Cuda-url]
 
-This repository contains PyTorch implementation for __PoinTr: Diverse Point Cloud Completion with Geometry-Aware Transformers__ (ICCV 2021 Oral Presentation).
 
-PoinTr is a transformer-based model for point cloud completion.  By representing the point cloud as a set of unordered groups of points with position embeddings, we convert the point cloud to a sequence of point proxies and employ a transformer encoder-decoder architecture for generation. We also propose two more challenging benchmarks [ShapeNet-55/34](./DATASET.md) with more diverse incomplete point clouds that can better reflect the real-world scenarios to promote future research.
+# Getting Started
+There are two ways to set environments. We **recommend** to use Colab without output.  
+- First is using:
+  - [**colab without output**](https://github.com/Cmput-414/PoinTr/blob/master/Project%20Implementation.ipynb).  
+  - [**colab with output**](https://github.com/Cmput-414/PoinTr/blob/master/project_implementation_with_output.ipynb).  
+- Second is follow the below instructions.  
 
-![intro](fig/pointr.gif)
+## Prerequisites 
+- python==3.6 
 
-## 🔥News
-- **2021-10-07** Our solution based on PoinTr wins the ***Championship*** on [MVP Completion Challenge (ICCV Workshop 2021)](https://mvp-dataset.github.io/MVP/Completion.html). The code will come soon.
-- **2021-09-09** Fix a bug in `datasets/PCNDataset.py`[(#27)](https://github.com/hzxie/GRNet/pull/27), and update the performance of PoinTr on PCN benchmark (CD from 8.38 to ***7.26***).
+- pytorch==1.4.0  
 
-## Pretrained Models
+- torchvision==0.5.0
 
-We provide pretrained PoinTr models:
-| dataset  | url| performance |
-| --- | --- |  --- |
-| ShapeNet-55 | [[Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/4a7027b83da343bb9ac9/?dl=1)] / [[Google Drive](https://drive.google.com/file/d/1WzERLlbSwzGOBybzkjBrApwyVMTG00CJ/view?usp=sharing)] / [[BaiDuYun](https://pan.baidu.com/s/1T4NqN5HQkInDTlNAX2KHbQ)] (code:erdh) | CD = 1.09e-3|
-| ShapeNet-34 | [[Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/ac82414f884d445ebd54/?dl=1)] / [[Google Drive](https://drive.google.com/file/d/1Xy6wZjgJNhOYe3wDA-SbLMmGwBJ0jcBz/view?usp=sharing)] / [[BaiDuYun](https://pan.baidu.com/s/1zAxYf_9ixixqR7lvnBsRNQ)] (code:atbb ) | CD = 2.05e-3| 
-| PCN |  [[Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/55b01b2990e040aa9cb0/?dl=1)] / [[Google Drive](https://drive.google.com/file/d/182xUHiUyIQhgqstFTVPoCyYyxmdiZlxq/view?usp=sharing)]  / [[BaiDuYun](https://pan.baidu.com/s/1iGenIM076akP8EgbYFBWyw)] (code:9g79) | CD = 8.38e-3|
-| PCN_new |  [[Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/444d34a062354c6ead68/?dl=1)] / [[Google Drive](https://drive.google.com/file/d/1qKhPKNf6o0jWnki5d0MGXQtBbgBSDIYo/view?usp=sharing)]  / [[BaiDuYun](https://pan.baidu.com/s/1RHsGXABzz7rbcq4syhg1hA)] (code:aru3 ) |CD = 7.26e-3|
-| KITTI | [[Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/734011f0b3574ab58cff/?dl=1)] / [[Google Drive](https://drive.google.com/file/d/1oPwXplvn9mR0dI9V7Xjw4RhGwrnBU4dg/view?usp=sharing)]  / [[BaiDuYun](https://pan.baidu.com/s/11FZsE7c0em2SxGVUIRYzyg)] (code:99om) | MMD = 5.04e-4 |
+- cudatoolkit=10.0  
 
-## Usage
+- GCC>= 4.9
 
-### Requirements
 
-- PyTorch >= 1.7.0
-- python >= 3.7
-- CUDA >= 9.0
-- GCC >= 4.9 
-- torchvision
-- timm
-- open3d
-- tensorboardX
+## Installation  
 
+### Step 1: Set environments  (~20 minutes)
+
+1. Git clone the code
+    ```
+    git clone https://github.com/Cmput-414/PoinTr.git pointr
+    ```
+2. Install the code to create a virtual environment
+    ```
+    wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh
+    chmod +x Miniconda3-py37_4.12.0-Linux-x86_64.sh
+    bash ./Miniconda3-py37_4.12.0-Linux-x86_64.sh -b -f -p /usr/local/
+    conda create --no-default-packages -n myenv python=3.6 --yes
+    ``` 
+3. Activate environment and install packages  
+    ```
+    source activate myenv && which python && conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.0 -c pytorch -y
+    source activate myenv && pip install ninja
+    source activate myenv && git config --global url."https://".insteadOf git://
+    source activate myenv && pip install "git+git://github.com/erikwijmans/Pointnet2_PyTorch.git#egg=pointnet2_ops&subdirectory=pointnet2_ops_lib"
+    source activate myenv && pip install --upgrade https://github.com/unlimblue/KNN_CUDA/releases/download/0.1/KNN_CUDA-0.1-py3-none-any.whl
+
+    ``` 
+4. install requirments and some modules
+    ```
+    source activate myenv && pip install -r requirements.txt
+    source activate myenv && cd /content/pointr/extensions/chamfer_dist && python setup.py install --user
+    source activate myenv && cd /content/pointr/extensions/cubic_feature_sampling && python setup.py install --user
+    source activate myenv && cd /content/pointr/extensions/gridding && python setup.py install --user 
+    source activate myenv && cd /content/pointr/extensions/gridding_loss && python setup.py install --user
+    ```
+### Step 2: Set dataset   (~15 minutes)
+There are 2 ways to set dataset, we **recommend** to use frist method:  
+- **First method**:  
+ We aleady shared a google drive folder [`Pointr`] to guanfang@ualberta.ca and basu@ualberta.ca. This folder contain the dataset.  
+ After you access the shared folder, you can run below code to set dataset.  
+  1. First connect to your google drive to access shared drive
+        ```
+        from google.colab import drive
+        drive.mount('/content/drive')
+        ```
+  2. Then run rest code to set dataset  
+  *sometimes Colab use gdrive as google drive folder-
+  ex: /content/**g**drive/Shareddrives
+      1. set KITTI dataset
+            ```
+            cp -r '/content/drive/Shareddrives/Pointr/kitti/bboxes' /content/pointr/data/KITTI
+            cp -r '/content/drive/Shareddrives/Pointr/kitti/cars' /content/pointr/data/KITTI
+            cp -r '/content/drive/Shareddrives/Pointr/kitti/tracklets' /content/pointr/data/KITTI
+            ```
+      2. Set ShapeNetCompletion (PCN) dataset  
+            ```
+            unzip /content/drive/Shareddrives/Pointr/PCN.zip -d /
+            ```
+- **Second method**:  
+You will need to dowload them or add them to your google drive.  
+Follow the data structure in [new_data.md](./new_data.md).  
+Make sure set the data into correct location.   
+
+    | dataset  | url |
+    | --- | --- |
+    | PCN |   [[Google Drive](https://drive.google.com/file/d/1hHIoAW97HUsc2A9F159xutd0ajar1mqi/view?usp=share_link)] |
+    | KITTI | [[Google Drive](https://drive.google.com/drive/folders/1fSu0_huWhticAlzLh3Ejpg8zxzqO1z-F?usp=share_link)]  | 
+
+# Usage  
+
+## Train  
+
+We will first to train the model to get F-score, CDL1, CDL2, and save the result as check point.  
+The we will use best check point to do test with some visual result (images).   
+
+0. Basic format for train
+    ```
+    bash ./scripts/train.sh <GPUIDS>
+        --config <config>
+        --exp_name <name> 
+    ```
+1. Train Pointr model on KITTI dataset with 1 GPU
+    ```
+    cd /content/pointr
+    source activate myenv && which python && bash ./scripts/train.sh 0 --config ./cfgs/KITTI_models/PoinTr.yaml --exp_name example 
+    ```
+2. Train Pointr model on PCN dataset with 1 GPU 
+    ```
+    cd /content/pointr
+    source activate myenv && which python && bash ./scripts/train.sh 0 --config ./cfgs/PCN_models/PoinTr.yaml --exp_name example 
+    ```
+
+## Evaluation   
+### Do test from Pretrain model
+Instead start trsing to do test, we also have some pretrain model.
+| Pretrained model | Download LInk |  
+| --- | --- |  
+| KITTI | [[Google Drive](https://drive.google.com/drive/folders/1XHxak8eOQBTqrPJL7dXQipLajWiSOKQh?usp=share_link)]|  
+| PCN | [[Google Drive](https://drive.google.com/file/d/1-L2bqK2dRMjSkDR8K6LEe_ad6JFT3kwj/view?usp=share_link)] |  
+
+Download pretrained model into ./pretrained folder  
 ```
-pip install -r requirements.txt
+mkdir pretrained
+cp -r /content/drive/Shareddrives/Pointr/pretrain/kitti-ckpt-best.pth -d /content/pointr/pretrained
+cp -r /content/drive/Shareddrives/Pointr/pretrain/pcn-ckpt_best.pth -d /content/pointr/pretrained  
+```  
+***For example: load pretrained model for KITTI***  
+/content/pointr/pretrained/kitti-ckpt-best.pth  
+***For example: load pretrained model for PCN***  
+/content/pointr/pretrained/pcn-ckpt-best.pth  
 ```
+source activate myenv && which python && bash ./scripts/test.sh 0 --ckpts ./pretrained/kitti-ckpt-best.pth --config ./cfgs/KITTI_models/PoinTr.yaml --exp_name example
+```  
 
-#### Building Pytorch Extensions for Chamfer Distance, PointNet++ and kNN
+### Do test from new training
+we will use result from training to do evaluation.  
+The training result will save into ./experiments/PoinTr  
+We will use the best check point (ckpt_best.pth) to do evaluation.  
+After test, we will be able to see some visual result (images) in folder ./vis_result.
 
-*NOTE:* PyTorch >= 1.7 and GCC >= 4.9 are required.
+0. Basic format for test
+    ```
+    bash ./scripts/test.sh <GPU_IDS>  \
+        --ckpts <path> \
+        --config <config> \
+        --exp_name <name> \
+        [--mode <easy/median/hard>]
+    ```
+1. Test PoinTr trained model on KITTI dataset:
+    ```
+    cd /content/pointr
+    source activate myenv && which python && bash ./scripts/test.sh 0 --ckpts ./experiments/PoinTr/KITTI_models/example/ckpt-best.pth --config ./cfgs/KITTI_models/PoinTr.yaml --exp_name example
+    ```  
+2. Test PoinTr trained model on PCN dataset:
+    ```
+    cd /content/pointr
+    source activate myenv && which python && bash ./scripts/test.sh 0 --ckpts ./experiments/PoinTr/PCN_models/example/ckpt-best.pth --config ./cfgs/PCN_models/PoinTr.yaml --exp_name example
+    ```
 
-```
-# Chamfer Distance
-bash install.sh
-```
-The solution for a common bug in chamfer distance installation can be found in Issue [#6](https://github.com/yuxumin/PoinTr/issues/6)
-```
-# PointNet++
-pip install "git+git://github.com/erikwijmans/Pointnet2_PyTorch.git#egg=pointnet2_ops&subdirectory=pointnet2_ops_lib"
-# GPU kNN
-pip install --upgrade https://github.com/unlimblue/KNN_CUDA/releases/download/0.2/KNN_CUDA-0.2-py3-none-any.whl
-```
+
+# Contributing
+
+What we do:  
+1. Add 3D CNN, we call it LBCNN
+2. Add label to modify the lose function.  
+2. Change the DG-CNN to improve the F-score and CDL.
+3. Draw a flowchart for project
+4. Write a documentation for code.
+5. Set a environment in colab
+
+- A visual result on KITTI datset.  
+  - 10 epoch, 16 batch size
+
+[![Watch the video](https://github.com/Cmput-414/PoinTr/blob/master/fig/image.png)](https://www.youtube.com/watch?v=NMUYv3yEMac) 
+  - 100 epoch, 16 batch size
+  
+  [![](https://github.com/Cmput-414/PoinTr/blob/0f1377c50aea9f78236b01c27b2fe64cecd6713a/fig/100-16.png)](https://github.com/Cmput-414/PoinTr/blob/0f1377c50aea9f78236b01c27b2fe64cecd6713a/fig/100-16.png)
+  
+# License
+
+Distributed under the MIT License. 
 
 
-### Dataset
 
-The details of our new ***ShapeNet-55/34*** datasets and other existing datasets can be found in [DATASET.md](./DATASET.md).
+# Contact
 
-### Evaluation
+| Name | Email |  
+| --- | --- |  
+| Shiqi Zhang | shiqi@ualberta.ca |  
+| Peng Cheng | pcheng1@ualberta.ca |  
 
-To evaluate a pre-trained PoinTr model on the Three Dataset with single GPU, run:
 
-```
-bash ./scripts/test.sh <GPU_IDS>  \
-    --ckpts <path> \
-    --config <config> \
-    --exp_name <name> \
-    [--mode <easy/median/hard>]
-```
+# Acknowledgments
 
-####  Some examples:
-Test the PoinTr pretrained model on the PCN benchmark:
-```
-bash ./scripts/test.sh 0 \
-    --ckpts ./pretrained/PoinTr_PCN.pth \
-    --config ./cfgs/PCN_models/PoinTr.yaml \
-    --exp_name example
-```
-Test the PoinTr pretrained model on ShapeNet55 benchmark (*easy* mode):
-```
-bash ./scripts/test.sh 0 \
-    --ckpts ./pretrained/PoinTr_ShapeNet55.pth \
-    --config ./cfgs/ShapeNet55_models/PoinTr.yaml \
-    --mode easy \
-    --exp_name example
-```
-Test the PoinTr pretrained model on the KITTI benchmark:
-```
-bash ./scripts/test.sh 0 \
-    --ckpts ./pretrained/PoinTr_KITTI.pth \
-    --config ./cfgs/KITTI_models/PoinTr.yaml \
-    --exp_name example
-CUDA_VISIBLE_DEVICES=0 python KITTI_metric.py \
-    --vis <visualization_path> 
-```
+* [Paper & Base code - Pointr](https://github.com/yuxumin/PoinTr) -  [Xumin Yu](https://yuxumin.github.io/)\*, [Yongming Rao](https://raoyongming.github.io/)\*, [Ziyi Wang](https://github.com/LavenderLA), [Zuyan Liu](https://github.com/lzy-19), [Jiwen Lu](https://scholar.google.com/citations?user=TN8uDQoAAAAJ&hl=en&authuser=1), [Jie Zhou](https://scholar.google.com/citations?user=6a79aPwAAAAJ&hl=en&authuser=1)    
+* [ReadMe file format](https://github.com/othneildrew/Best-README-Template)
 
-### Training
 
-To train a point cloud completion model from scratch, run:
-
-```
-# Use DistributedDataParallel (DDP)
-bash ./scripts/dist_train.sh <NUM_GPU> <port> \
-    --config <config> \
-    --exp_name <name> \
-    [--resume] \
-    [--start_ckpts <path>] \
-    [--val_freq <int>]
-# or just use DataParallel (DP)
-bash ./scripts/train.sh <GPUIDS> \
-    --config <config> \
-    --exp_name <name> \
-    [--resume] \
-    [--start_ckpts <path>] \
-    [--val_freq <int>]
-```
-####  Some examples:
-Train a PoinTr model on PCN benchmark with 2 gpus:
-```
-CUDA_VISIBLE_DEVICES=0,1 bash ./scripts/dist_train.sh 2 13232 \
-    --config ./cfgs/PCN_models/PoinTr.yaml \
-    --exp_name example
-```
-Resume a checkpoint:
-```
-CUDA_VISIBLE_DEVICES=0,1 bash ./scripts/dist_train.sh 2 13232 \
-    --config ./cfgs/PCN_models/PoinTr.yaml \
-    --exp_name example --resume
-```
-
-Finetune a PoinTr on PCNCars
-```
-CUDA_VISIBLE_DEVICES=0,1 bash ./scripts/dist_train.sh 2 13232 \
-    --config ./cfgs/KITTI_models/PoinTr.yaml \
-    --exp_name example \
-    --start_ckpts ./weight.pth
-```
-
-Train a PoinTr model with a single GPU:
-```
-bash ./scripts/train.sh 0 \
-    --config ./cfgs/KITTI_models/PoinTr.yaml \
-    --exp_name example
-```
-
-We also provide the Pytorch implementation of several baseline models including GRNet, PCN, TopNet and FoldingNet. For example, to train a GRNet model on ShapeNet-55, run:
-```
-CUDA_VISIBLE_DEVICES=0,1 bash ./scripts/dist_train.sh 2 13232 \
-    --config ./cfgs/ShapeNet55_models/GRNet.yaml \
-    --exp_name example
-```
-
-### Completion Results on ShapeNet55 and KITTI-Cars
-
-![results](fig/VisResults.gif)
-
-## License
-MIT License
-
-## Acknowledgements
-
-Our code is inspired by [GRNet](https://github.com/hzxie/GRNet) and [mmdetection3d](https://github.com/open-mmlab/mmdetection3d).
-
-## Citation
-If you find our work useful in your research, please consider citing: 
-```
-@inproceedings{yu2021pointr,
-  title={PoinTr: Diverse Point Cloud Completion with Geometry-Aware Transformers},
-  author={Yu, Xumin and Rao, Yongming and Wang, Ziyi and Liu, Zuyan and Lu, Jiwen and Zhou, Jie},
-  booktitle={ICCV},
-  year={2021}
-}
-```
+[Python.com]: https://img.shields.io/badge/python%203.6-ffffff?logo=python
+[Python-url]: https://python.com 
+[Pytorch.com]: https://img.shields.io/badge/pytorch%201.4-FFFFFF?logo=pytorch
+[Pytorch-url]: https://Pytorch.com
+[Cuda.com]: https://img.shields.io/badge/cuda%20%2010.0%20-FFFFFF?logo=nvidia
+[Cuda-url]: https://developer.nvidia.com/cuda-10.0-download-archive
